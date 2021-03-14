@@ -1,4 +1,4 @@
-import { Db, MongoClient, ObjectId } from 'mongodb';
+import { Collection, Db, MongoClient, ObjectId } from 'mongodb';
 import assert from 'assert';
 
 // Connection URL
@@ -10,7 +10,8 @@ const dbName = 'bemed-beta';
 export class MongoConnection {
     instance: MongoClient;
     db: Db;
-    collecionName: string;
+    private collecionName: string;
+
     constructor(collection: string) {
         this.instance = new MongoClient(url);
         this.collecionName = collection;
@@ -40,5 +41,9 @@ export class MongoConnection {
 
     async Close() {
         await this.instance.close();
+    }
+
+    public get collection(){
+        return this.db.collection(this.collecionName);
     }
 }

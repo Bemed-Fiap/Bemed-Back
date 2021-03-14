@@ -8,7 +8,8 @@ export class UsuarioBuilder {
         nascimento: null,
         nome: null,
         sobrenome: null,
-        usuario: null
+        usuario: null,
+        _id: null
     }
     setEndereco = (valor: any) => {
         this.entity.Endereco = valor;

@@ -1,22 +1,15 @@
 import express from 'express';
-import { MongoConnection } from './../database/connection';
+import { UsuarioService } from './../services/usuario.service';
 
 const routes = express.Router();
+const _usuarioService = new UsuarioService();
 
 routes.get('/', async (req, res) => {
     return res.send('Hello Bemed');
 });
 
-routes.get('/mongo', async (req, res) => {
-    const _usuario = new MongoConnection('usuario');
-    await _usuario.Connect();
-    const usuarioInserido = await _usuario.Insert({ nome: 'michel 2', sobrenome: ':)' });
-    const todos = await _usuario.All();
-    await _usuario.Close();
-    return res.json({ 
-        usuarioInserido,
-        todos
-    });
-});
+routes.get('/usuario/', _usuarioService.Get);
+routes.get('/usuario/:id', _usuarioService.Get);
+routes.post('/usuario', _usuarioService.Post);
 
 export default routes;

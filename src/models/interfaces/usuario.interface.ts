@@ -1,6 +1,7 @@
 import IEndereco from "./endereco.interface";
 
 export default interface IUsuario {
+    _id: string,
     usuario: string,
     nome: string,
     sobrenome: string,
