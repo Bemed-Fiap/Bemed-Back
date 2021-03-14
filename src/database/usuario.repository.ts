@@ -1,5 +1,3 @@
-import { MongoClient } from 'mongodb';
-import { MongoConnection } from '../database/connection';
 import IUsuario from '../models/interfaces/usuario.interface';
 import { BaseRepository } from './base.repository';
 
