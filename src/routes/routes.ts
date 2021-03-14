@@ -14,7 +14,6 @@ routes.get('/auth', async (req, res) => {
     return res.json({
         tokenGenerated,
         tokenRecovered
-    });
 });
-
+  
 export default routes;
