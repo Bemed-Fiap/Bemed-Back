@@ -1,38 +1,56 @@
-const CryptoJS = require('crypto-js');
-const uuid = require('uuid');
+// const CryptoJS = require('crypto-js');
+// const uuid = require('uuid');
+// const LZUTF8 = require('lzutf8');
+
+// import { BemedSecurity } from './utils/bemed.security';
+// import { TokenService } from './services/token.service';
+// import moment from 'moment';
+// import IUsuario from './models/interfaces/usuario.interface';
+// const security = new BemedSecurity();
+// const token = new TokenService();
+
+// // var x = security.Criptografar('abc123', '0011223344556677');
+// // console.log('enc', x);
+
+// // var y = security.Descriptografar(x, '0011223344556677');
+// // console.log('dec', y);
 
 
-function GerarTokenUsuario(usuario, email, authenticado, secretKey) {
 
-    var tokenStructArray = [usuario, email, authenticado];
-    var tokenStructString = tokenStructArray.join(',');
-    if (!secretKey) secretKey = uuid.v4();
-    secretKey = secretKey.toString().replace(/-/g, '');
-    secretKey = [secretKey, secretKey.split('').reverse().join('')];
-    var cryptoValue = CryptoJS.AES.encrypt(tokenStructString, secretKey[0]);
-    console.log(cryptoValue.toString());
-    console.log(secretKey);
+// (async () => {
 
-    return cryptoValue.toString() + secretKey[1];
-}
-
-function BemedDecryptToken(encryptedValue) {
-    encryptedValue = encryptedValue.toString();
-
-    var trustCipher = encryptedValue.substring(0, encryptedValue.length - 32);
-    var trustKey = encryptedValue.substring(trustCipher.length);
-    trustKey = trustKey.split('').reverse().join('');
-
-    var descryptedByte = CryptoJS.AES.decrypt(trustCipher, trustKey);
-    var originalText = descryptedByte.toString(CryptoJS.enc.Utf8);
-    return originalText.toString();
-}
+//     const user: IUsuario = {
+//         _id: "604ec1cbd31e217f00549d40",
+//         Endereco: null,
+//         documento: "10101010133",
+//         email: "mail@mail.com",
+//         nascimento: moment("2000-02-01T02:00:00.000Z").toDate(),
+//         nome: "MICHEL",
+//         sobrenome: "SANTANA",
+//         senha: "U2FsdGVkX19xSwMvlK0wP1rA+h1bvubGWGZ0ucjUj/U=",
+//         salt: "09775669901d40cb"
+//     }
 
 
-var x = GerarTokenUsuario('michel', 'mail@mail.com', 'sim', uuid.v4());
-console.log(x);
+//     var c = LZUTF8.compress(JSON.stringify(user), { outputEncoding: 'ByteArray' });
+//     c = c.toString();
+//     console.log(c);
+    
+//     var t = security.Criptografar(c, '0011223344556677');
+//     console.log(t);
 
-var y = BemedDecryptToken(x);
-console.log(y);
+//     console.log('███████');
+
+//     var x = await token.Gerar(user);
+//     console.log(x);
+
+//     var dc = LZUTF8.decompress(c.split(','), { inputEncoding: 'ByteArray', outputEncoding: 'String' });
+//     console.log(dc);
 
 
+//     return;
+   
+
+//     var y = await token.Decifrar(x);
+//     console.log(y);
+// })();

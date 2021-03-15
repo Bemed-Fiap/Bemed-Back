@@ -1,16 +1,15 @@
 import { Db, MongoClient, ObjectId } from 'mongodb';
-import assert from 'assert';
+import env from 'dotenv';
+env.config();
 
-// Connection URL
-const url = 'mongodb://localhost:27017';
-// Database Name
-const dbName = 'bemed-beta';
-
+const url = process.env.MONGOURL;
+const dbName = process.env.MONGODATABASE;
 
 export class MongoConnection {
     instance: MongoClient;
     db: Db;
-    collecionName: string;
+    private collecionName: string;
+
     constructor(collection: string) {
         this.instance = new MongoClient(url);
         this.collecionName = collection;
@@ -40,5 +39,9 @@ export class MongoConnection {
 
     async Close() {
         await this.instance.close();
+    }
+
+    public get collection(){
+        return this.db.collection(this.collecionName);
     }
 }
