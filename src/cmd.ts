@@ -1,67 +1,56 @@
 // const CryptoJS = require('crypto-js');
 // const uuid = require('uuid');
+// const LZUTF8 = require('lzutf8');
+
 // import { BemedSecurity } from './utils/bemed.security';
+// import { TokenService } from './services/token.service';
+// import moment from 'moment';
+// import IUsuario from './models/interfaces/usuario.interface';
 // const security = new BemedSecurity();
+// const token = new TokenService();
 
-// function GerarTokenUsuario(usuario, email, authenticado, secretKey) {
+// // var x = security.Criptografar('abc123', '0011223344556677');
+// // console.log('enc', x);
 
-//     var tokenStructArray = [usuario, email, authenticado];
-//     var tokenStructString = tokenStructArray.join(',');
-//     if (!secretKey) secretKey = uuid.v4();
-//     secretKey = secretKey.toString().replace(/-/g, '');
-//     secretKey = [secretKey, secretKey.split('').reverse().join('')];
-//     var cryptoValue = CryptoJS.AES.encrypt(tokenStructString, secretKey[0]);
-//     console.log(cryptoValue.toString());
-//     console.log(secretKey);
-
-//     return cryptoValue.toString() + secretKey[1];
-// }
-
-// function BemedDecryptToken(encryptedValue) {
-//     encryptedValue = encryptedValue.toString();
-
-//     var trustCipher = encryptedValue.substring(0, encryptedValue.length - 32);
-//     var trustKey = encryptedValue.substring(trustCipher.length);
-//     trustKey = trustKey.split('').reverse().join('');
-
-//     var descryptedByte = CryptoJS.AES.decrypt(trustCipher, trustKey);
-//     var originalText = descryptedByte.toString(CryptoJS.enc.Utf8);
-//     return originalText.toString();
-// }
+// // var y = security.Descriptografar(x, '0011223344556677');
+// // console.log('dec', y);
 
 
-// function Encrypt(valor, salt) {
-//     var cryptoValue = CryptoJS.AES.encrypt(valor, salt);
-//     return cryptoValue.toString();
-// }
 
-// function Decrypt(encryptedValue, salt) {
-//     var dec = CryptoJS.AES.decrypt(encryptedValue, salt);
-//     var originalText = dec.toString(CryptoJS.enc.Utf8);
-//     return originalText.toString();
-// }
+// (async () => {
 
-
-// var x1 = GerarTokenUsuario('michel', 'mail@mail.com', 'sim', uuid.v4());
-// console.log('x1', x1);
-
-// var y1 = BemedDecryptToken(x1);
-// console.log('y1', y1);
-
-// var x = security.Criptografar('abc123', '0011223344556677');
-// console.log('enc', x);
-
-// var y = security.Descriptografar(x, '0011223344556677');
-// console.log('dec', y);
+//     const user: IUsuario = {
+//         _id: "604ec1cbd31e217f00549d40",
+//         Endereco: null,
+//         documento: "10101010133",
+//         email: "mail@mail.com",
+//         nascimento: moment("2000-02-01T02:00:00.000Z").toDate(),
+//         nome: "MICHEL",
+//         sobrenome: "SANTANA",
+//         senha: "U2FsdGVkX19xSwMvlK0wP1rA+h1bvubGWGZ0ucjUj/U=",
+//         salt: "09775669901d40cb"
+//     }
 
 
-import moment from 'moment';
+//     var c = LZUTF8.compress(JSON.stringify(user), { outputEncoding: 'ByteArray' });
+//     c = c.toString();
+//     console.log(c);
+    
+//     var t = security.Criptografar(c, '0011223344556677');
+//     console.log(t);
 
-var dt1 = moment(new Date(2021, 2, 1, 23, 20, 0));
-var dt2 = moment(new Date(2021, 2, 1, 23, 21, 0));
+//     console.log('███████');
 
-console.log(dt1 > dt2);
-console.log(dt2 > dt1);
+//     var x = await token.Gerar(user);
+//     console.log(x);
 
-console.log(dt1);
-console.log(dt2);
+//     var dc = LZUTF8.decompress(c.split(','), { inputEncoding: 'ByteArray', outputEncoding: 'String' });
+//     console.log(dc);
+
+
+//     return;
+   
+
+//     var y = await token.Decifrar(x);
+//     console.log(y);
+// })();

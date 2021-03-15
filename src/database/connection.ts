@@ -1,7 +1,9 @@
-import { Collection, Db, MongoClient, ObjectId } from 'mongodb';
+import { Db, MongoClient, ObjectId } from 'mongodb';
+import env from 'dotenv';
+env.config();
 
-const url = 'mongodb://localhost:27017';
-const dbName = 'bemed-beta';
+const url = process.env.MONGOURL;
+const dbName = process.env.MONGODATABASE;
 
 export class MongoConnection {
     instance: MongoClient;

@@ -1,5 +1,6 @@
 export interface IToken {
     expires: Date,
-    authenticated: boolean,
-    data: string[]
+    usuarioId: string,
+    usuarioEmail: string,
+    roles: number[]
 }

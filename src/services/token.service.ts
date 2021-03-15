@@ -2,13 +2,20 @@ import * as CryptoJS from 'crypto-js';
 import * as uuid from 'uuid';
 import moment from 'moment';
 import { IToken } from '../models/interfaces/token.interface';
+import IUsuario from '../models/interfaces/usuario.interface';
+import SecurityRoles from '../utils/SecurityRoles';
+import env from 'dotenv';
+env.config();
+
+const TOKENEXPIRATION = process.env.TOKENEXPIRATION || 10;
 
 export class TokenService {
-    async Gerar(dadosSalvar: string[]): Promise<string> {
+    async Gerar(usuario: IUsuario): Promise<string> {
         const tokenData: IToken = {
-            data: dadosSalvar,
-            authenticated: true,
-            expires: moment().add(1, 'minute').toDate()
+            expires: moment().add(TOKENEXPIRATION, 'minute').toDate(),
+            roles: [SecurityRoles.UsuarioPessoaFisica],
+            usuarioEmail: usuario.email,
+            usuarioId: usuario._id
         }
         const tokenStructString = JSON.stringify(tokenData);
         let secretKey = uuid.v4();

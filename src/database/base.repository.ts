@@ -1,7 +1,6 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { MongoConnection } from './connection';
 
-
 export class BaseRepository<T> {
 
     connection: MongoConnection

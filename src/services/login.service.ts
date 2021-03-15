@@ -21,14 +21,13 @@ export class LoginService {
 
         const usuario = usuarios[0] as IUsuario;
 
-        //const hash = _security.Criptografar(senha.toString(), usuario.salt);
         const senhaDescriptografada = _security.Descriptografar(usuario.senha, usuario.salt);
 
         if (senhaDescriptografada == senha) {
-            const token = await _token.Gerar([usuario.nome, usuario.email, '1'])
+            const token = await _token.Gerar(usuario);
             return response.json({ token });
         }
-        
+
         return response.status(HttpStatusCode.FORBIDDEN)
     }
 }
