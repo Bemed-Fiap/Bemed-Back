@@ -3,6 +3,10 @@ import { BaseRepository } from './base.repository';
 
 
 export class UsuarioRepository extends BaseRepository<IUsuario> {
+    constructor() {
+        super('usuarios');
+    }
+
     async Many(mongoFind: any): Promise<IUsuario[]> {
         var result = this.connection.collection.find(mongoFind).toArray();
         return result;

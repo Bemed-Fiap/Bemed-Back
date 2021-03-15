@@ -1,16 +1,18 @@
 import IUsuario from "../models/interfaces/usuario.interface";
 import { UsuarioRepository } from '../database/usuario.repository';
-import { Request, response, Response } from 'express';
-
-const _usuarioRepository = new UsuarioRepository('usuarios');
-
+import { UsuarioBuilder } from './../models/usuario.builder';
+import { BemedSecurity } from '../utils/bemed.security';
+import { Request, Response } from 'express';
+const _usuarioRepository = new UsuarioRepository();
+const _security = new BemedSecurity();
+const _builder = new UsuarioBuilder();
 
 export class UsuarioService {
 
     async Get(request: Request, response: Response): Promise<Response> {
         const { id } = request.params;
         const { nome } = request.query;
-        
+
         let result: IUsuario[];
 
         if (id) { result = [await _usuarioRepository.GetById(id)]; }
@@ -22,8 +24,10 @@ export class UsuarioService {
 
     async Post(request: Request, response: Response): Promise<Response> {
         const usuario = request.body as IUsuario;
-        const result = await _usuarioRepository.Insert(usuario);
-        
+        const usuarioSeguro = await _security.GerarUsuarioSeguro(usuario);
+        _builder.ConverterInterface(usuarioSeguro);
+        const result = await _usuarioRepository.Insert(usuarioSeguro);
+
         return response.json(result);
     }
 }

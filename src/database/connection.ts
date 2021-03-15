@@ -1,11 +1,7 @@
 import { Collection, Db, MongoClient, ObjectId } from 'mongodb';
-import assert from 'assert';
 
-// Connection URL
 const url = 'mongodb://localhost:27017';
-// Database Name
 const dbName = 'bemed-beta';
-
 
 export class MongoConnection {
     instance: MongoClient;
