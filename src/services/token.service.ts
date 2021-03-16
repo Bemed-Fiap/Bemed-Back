@@ -1,21 +1,22 @@
 import * as CryptoJS from 'crypto-js';
 import * as uuid from 'uuid';
 import moment from 'moment';
-import { IToken } from '../models/interfaces/token.interface';
+import IToken from '../models/interfaces/token.interface';
 import IUsuario from '../models/interfaces/usuario.interface';
 import SecurityRoles from '../utils/SecurityRoles';
 import env from 'dotenv';
+import ILogin from '../models/interfaces/login.interface';
 env.config();
 
 const TOKENEXPIRATION = process.env.TOKENEXPIRATION || 10;
 
 export class TokenService {
-    async Gerar(usuario: IUsuario): Promise<string> {
+    async Gerar(loginData: ILogin): Promise<string> {
         const tokenData: IToken = {
             expires: moment().add(TOKENEXPIRATION, 'minute').toDate(),
             roles: [SecurityRoles.UsuarioPessoaFisica],
-            usuarioEmail: usuario.email,
-            usuarioId: usuario._id
+            usuarioEmail: loginData.usuario,
+            usuarioId: loginData._id
         }
         const tokenStructString = JSON.stringify(tokenData);
         let secretKey = uuid.v4();
