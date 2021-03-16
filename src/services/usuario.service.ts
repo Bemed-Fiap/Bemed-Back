@@ -3,6 +3,7 @@ import { UsuarioRepository } from '../database/usuario.repository';
 import { UsuarioBuilder } from './../models/usuario.builder';
 import { BemedSecurity } from '../utils/bemed.security';
 import { Request, Response } from 'express';
+import IUsuarioSecurity from "../models/interfaces/usuario.security.interface";
 const _usuarioRepository = new UsuarioRepository();
 const _security = new BemedSecurity();
 const _builder = new UsuarioBuilder();
@@ -24,9 +25,9 @@ export class UsuarioService {
 
     async Post(request: Request, response: Response): Promise<Response> {
         const usuario = request.body as IUsuario;
-        const usuarioSeguro = await _security.GerarUsuarioSeguro(usuario);
-        _builder.ConverterInterface(usuarioSeguro);
-        const result = await _usuarioRepository.Insert(usuarioSeguro);
+        const usuarioSeguro = await _security.GerarUsuarioSeguro(<IUsuarioSecurity>usuario);
+        _builder.ConverterInterface(<IUsuario>usuarioSeguro);
+        const result = await _usuarioRepository.Insert(<IUsuario>usuarioSeguro);
 
         return response.json(result);
     }

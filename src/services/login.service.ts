@@ -5,6 +5,8 @@ import { TokenService } from './token.service';
 import { Request, Response } from 'express';
 import { BemedSecurity } from '../utils/bemed.security';
 import HttpStatusCode from "../utils/HttpStatusCode";
+import IUsuarioSecurity from "../models/interfaces/usuario.security.interface";
+import ILogin from "../models/interfaces/login.interface";
 
 const _usuario = new UsuarioRepository();
 const _token = new TokenService();
@@ -24,7 +26,12 @@ export class LoginService {
         const senhaDescriptografada = _security.Descriptografar(usuario.senha, usuario.salt);
 
         if (senhaDescriptografada == senha) {
-            const token = await _token.Gerar(usuario);
+            const login: ILogin = {
+                _id : usuario._id,
+                senha: usuario.senha,
+                usuario: usuario.email
+            };
+            const token = await _token.Gerar(login);
             return response.json({ token });
         }
 
