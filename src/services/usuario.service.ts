@@ -28,6 +28,9 @@ export class UsuarioService {
         const usuarioSeguro = await _security.GerarUsuarioSeguro(<IUsuarioSecurity>usuario);
         _builder.ConverterInterface(<IUsuario>usuarioSeguro);
         const result = await _usuarioRepository.Insert(<IUsuario>usuarioSeguro);
+        if(result._id){
+            
+        }
 
         return response.json(result);
     }
