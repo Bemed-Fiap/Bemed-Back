@@ -19,26 +19,4 @@ export class CarteiraService {
         );
         return carteira;
     }
-
-    async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {
-        const carteira = await _carteira.GetById(transacao.carteiraDestinoId);
-        carteira.HistoricoTranscoes.push(transacao._id);
-        carteira.dtAlteracao = moment().toDate();
-        carteira.pontos = this.CalcularPontos(carteira.pontos, transacao);
-        await _carteira.Update(carteira._id, carteira);
-        return true;
-    }
-
-    private CalcularPontos(pontos: number, transacao: ITransacao) : number{
-        let result = pontos;
-        switch(transacao.tipoTransacao){
-            case TipoTransacao.Entrada:
-                result + (transacao.valor * 1);
-                break;
-            case TipoTransacao.Entrada:
-                result + (transacao.valor * 1);
-                break;
-        }
-        return result;
-    }
 }
