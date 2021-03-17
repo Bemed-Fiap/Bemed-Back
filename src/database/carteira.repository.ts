@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongodb';
 import ICarteira from '../models/interfaces/Carteira.interface';
 import { BaseRepository } from './base.repository';
 
@@ -13,9 +14,9 @@ export class CarteiraRepository extends BaseRepository<ICarteira> {
         return result;
     }
 
-    async Update(_id: string, carteira: ICarteira) {
+    async Update(query: FilterQuery<ICarteira>, carteira: ICarteira) {
 
-        var result = await this.connection.collection.updateOne({ _id: _id }, carteira);
+        var result = await this.connection.collection.replaceOne(query, carteira);
         return result;
     }
 }

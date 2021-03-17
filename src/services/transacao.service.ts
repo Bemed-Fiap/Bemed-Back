@@ -4,6 +4,7 @@ import { CarteiraRepository } from "../database/Carteira.repository";
 import moment from "moment";
 import TipoTransacao from "../utils/TipoTransacao";
 import ITransacao from "../models/interfaces/transacao.interface";
+import { ObjectId } from 'bson';
 
 const _transacao = new TransacaoRepository();
 const _carteira = new CarteiraRepository();
@@ -40,23 +41,23 @@ export class TransacaoService {
         return transacao;
     }
 
-    async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {
+    private async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {
         const carteira = await _carteira.GetById(transacao.carteiraDestinoId);
         carteira.HistoricoTranscoes.push(transacao._id);
         carteira.dtAlteracao = moment().toDate();
         carteira.pontos = this.CalcularPontos(carteira.pontos, transacao);
-        await _carteira.Update(carteira._id, carteira);
+        await _carteira.Update({ _id: carteira._id, }, carteira);
         return true;
     }
 
-    private CalcularPontos(pontos: number, transacao: ITransacao) : number{
-        let result = pontos;
-        switch(transacao.tipoTransacao){
+    private CalcularPontos(pontos: number, transacao: ITransacao): number {
+        let result = pontos || 0;
+        switch (transacao.tipoTransacao) {
             case TipoTransacao.Entrada:
-                result + (transacao.valor * 1);
+                result = result + (transacao.valor * 1);
                 break;
             case TipoTransacao.Entrada:
-                result + (transacao.valor * 1);
+                result = result + (transacao.valor * 1);
                 break;
         }
         return result;
