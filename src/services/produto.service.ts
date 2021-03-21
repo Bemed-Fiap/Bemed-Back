@@ -15,71 +15,26 @@ interface IProdutoServiceResponse {
 
 export default class ProdutoService {
 
-    async Get(request: Request, response: Response): Promise<Response<IProduto[]>> {
-        const { id } = request.params;
-        const { nome } = request.query;
-
-        let result: IProduto[];
-
-        if (id) { result = [await _produto.GetById(id)]; }
-        else if (nome) { result = await _produto.Many({ nome: nome }); }
-        else { result = await _produto.All(); }
-
-        return response.json(result);
+    async BuscarPorId(id: string): Promise<IProduto> {
+        return await _produto.GetById(id);
     }
 
-    async Post(request: Request, response: Response): Promise<Response<IProdutoServiceResponse>> {
-        try {
-            const builder = new ProdutoBuilder();
-            const produtoRequest = request.body;
-
-            const produto = builder
-                .setCategoria(produtoRequest.categoria)
-                .setComBula(produtoRequest.comBula)
-                .setComCaixa(produtoRequest.comCaixa)
-                .setComNF(produtoRequest.comNF)
-                .setComReceita(produtoRequest.comReceita)
-                .setDosagem(produtoRequest.dosagem)
-                .setNome(produtoRequest.nome)
-                //.setTipoMedidaDevolucao(produtoRequest.tipoMedidaDevolucao)
-                .Build();
-
-            const ProdutosEncontradas = await _produto.Many({ nome: produto.nome });
-
-            if (ProdutosEncontradas.length > 0) return response.json(ProdutoService.ProdutoJaCadastrado(ProdutosEncontradas[0]));
-
-            const produtoSalvo = await _produto.Insert(produto);
-
-            return response.json(ProdutoService.ProdutoCriadoComSucesso(produtoSalvo));
-        } catch (e) {
-            return response.json(ProdutoService.ErroAoCriarProduto())
-        }
+    async BuscarPor(produto: IProduto): Promise<IProduto[]> {
+        return await _produto.Many(produto);
     }
 
-    static ProdutoJaCadastrado(produto: IProduto) {
-        return {
-            Produto: produto,
-            id: produto._id.toString(),
-            mensagem: 'Produto já cadastrado!',
-            sucesso: true
-        };
+    async BuscarTodos(): Promise<IProduto[]> {
+        return await _produto.All();
     }
 
-    static ProdutoCriadoComSucesso(produto: IProduto) {
-        return {
-            Produto: produto,
-            id: produto._id.toString(),
-            mensagem: 'Salvo com sucesso!',
-            sucesso: true
-        };
-    }
+    async Criar(produto: IProduto): Promise<IProduto> {
 
-    static ErroAoCriarProduto() {
-        return {
-            Produto: null,
-            id: null,
-            mensagem: 'Erro ao criar produto!',
-            sucesso: false
-        }
+        const ProdutosEncontrados = await _produto.Many({ nome: produto.nome });
+
+        if (ProdutosEncontrados.length > 0) return ProdutosEncontrados[0];
+
+        const produtoSalvo = await _produto.Insert(produto);
+
+        return produtoSalvo;
     }
 }
