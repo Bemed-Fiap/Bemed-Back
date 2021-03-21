@@ -5,7 +5,7 @@ env.config();
 const url = process.env.MONGOURL;
 const dbName = process.env.MONGODATABASE;
 
-export class MongoConnection {
+export default class MongoConnection {
     instance: MongoClient;
     db: Db;
     private collecionName: string;

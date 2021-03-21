@@ -1,8 +1,8 @@
-import ITransacao from "./interfaces/transacao.interface";
+import BaseBuilder from "./base.builder";
 import ICarteira from "./interfaces/carteira.interface";
 
-export class CarteiraBuilder {
-    private entity: ICarteira = {
+export default class CarteiraBuilder extends BaseBuilder<ICarteira>  {
+    protected entity: ICarteira = {
         HistoricoTranscoes: null,
         dtAlteracao: null,
         dtCriacao: null,
@@ -26,5 +26,4 @@ export class CarteiraBuilder {
         this.entity.usuarioId = value;
         return this;
     }
-    Build = () => this.entity;
 }

@@ -1,19 +1,16 @@
 import IUsuario from "./../models/interfaces/usuario.interface";
-import { UsuarioRepository } from './../database/usuario.repository';
-import { UsuarioBuilder } from './../models/usuario.builder';
-import { TokenService } from './token.service';
+import UsuarioRepository from './../database/usuario.repository';
+import TokenService from './token.service';
 import { Request, Response } from 'express';
-import { BemedSecurity } from '../utils/bemed.security';
-import HttpStatusCode from "../utils/HttpStatusCode";
-import IUsuarioSecurity from "../models/interfaces/usuario.security.interface";
+import BemedSecurity from '../utils/bemed.security';
+import HttpStatusCode from "../utils/https-statuscode.type";
 import ILogin from "../models/interfaces/login.interface";
 
 const _usuario = new UsuarioRepository();
 const _token = new TokenService();
 const _security = new BemedSecurity();
-const _builder = new UsuarioBuilder();
 
-export class LoginService {
+export default class LoginService {
     async Login(request: Request, response: Response): Promise<Response> {
         const { email, senha } = request.headers;
         const usuarios = await _usuario.Many({ email });

@@ -1,7 +1,8 @@
+import BaseBuilder from "./base.builder";
 import ITransacao from "./interfaces/transacao.interface";
 
-export class TransacaoBuilder {
-    private entity: ITransacao = {
+export default class TransacaoBuilder extends BaseBuilder<ITransacao> {
+    protected entity: ITransacao = {
         _id: null,
         dtAlteracao: null,
         dtCriacao: null,
@@ -48,5 +49,4 @@ export class TransacaoBuilder {
         this.entity.farmaciaId = value;
         return this;
     }
-    Build = () => this.entity;
 }

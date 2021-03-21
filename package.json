@@ -31,9 +31,11 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "knex": "^0.21.18",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mongodb": "^3.6.4",
     "sqlite3": "^5.0.2",
+    "ts-transformer-keys": "^0.4.3",
     "uuid": "^8.3.2"
   }
 }

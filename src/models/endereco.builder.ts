@@ -1,7 +1,8 @@
+import BaseBuilder from "./base.builder";
 import IEndereco from "./interfaces/Endereco.interface";
 
-export class EnderecoBuilder {
-    private entity: IEndereco = {
+export default class EnderecoBuilder extends BaseBuilder<IEndereco> {
+    protected entity: IEndereco = {
         cep: null,
         complemento: null,
         info: null,
@@ -43,5 +44,4 @@ export class EnderecoBuilder {
         this.entity.estado = valor;
         return this;
     }
-    Build = () => this.entity;
 }

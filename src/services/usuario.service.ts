@@ -1,21 +1,26 @@
-import IUsuario from "../models/interfaces/usuario.interface";
-import { UsuarioRepository } from '../database/usuario.repository';
-import { UsuarioBuilder } from './../models/usuario.builder';
-import { BemedSecurity } from '../utils/bemed.security';
 import { Request, Response } from 'express';
+import IUsuario from "../models/interfaces/usuario.interface";
+import UsuarioRepository from '../database/usuario.repository';
+import UsuarioBuilder from './../models/usuario.builder';
+import BemedSecurity from '../utils/bemed.security';
 import IUsuarioSecurity from "../models/interfaces/usuario.security.interface";
-import { CarteiraService } from './carteira.service';
-import { TransacaoService } from './transacao.service';
+import CarteiraService from './carteira.service';
+import TransacaoService from './transacao.service';
+import ICarteira from "../models/interfaces/Carteira.interface";
 
 const _usuarioRepository = new UsuarioRepository();
 const _security = new BemedSecurity();
-const _builder = new UsuarioBuilder();
 const _carteiraSevice = new CarteiraService();
 const _transacaoSevice = new TransacaoService();
 
-export class UsuarioService {
+class IUsuarioServiceResponse {
+    Usuario: IUsuario
+    Carteira: ICarteira
+}
 
-    async Get(request: Request, response: Response): Promise<Response> {
+export default class UsuarioService {
+
+    async Get(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse[]>> {
         const { id } = request.params;
         const { nome } = request.query;
 
@@ -24,30 +29,49 @@ export class UsuarioService {
         if (id) { result = [await _usuarioRepository.GetById(id)]; }
         else if (nome) { result = await _usuarioRepository.Many({ nome: nome }); }
         else { result = await _usuarioRepository.All(); }
-        for(var u of result) {
+        for (var u of result) {
             u.Carteira = await _carteiraSevice.GetByUsuario(u);
         }
         return response.json(result);
     }
 
-    async Post(request: Request, response: Response): Promise<Response> {
-        const usuario = request.body as IUsuario;
+    async Post(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse>> {
+        const builder = new UsuarioBuilder();
+        const usuarioRequest = request.body;
+
+        const usuario = builder
+            .setDocumento(usuarioRequest.documento)
+            .setEmail(usuarioRequest.email)
+            .setEndereco(usuarioRequest.endereco)
+            .setNascimento(usuarioRequest.nascimento)
+            .setNome(usuarioRequest.nome)
+            .setSobrenome(usuarioRequest.sobrenome)
+            .setSalt(usuarioRequest.salt)
+            .setSenha(usuarioRequest.senha)
+            .Build();
+
+        const result: IUsuarioServiceResponse = {
+            Usuario: null,
+            Carteira: null
+        };
 
         const usuariosEncontrados = await _usuarioRepository.Many({ email: usuario.email });
 
         if (usuariosEncontrados.length > 0) {
-            UsuarioBuilder.ConverterInterface(usuariosEncontrados[0]);
-            return response.json(usuariosEncontrados[0]);
+            const carteira = await _carteiraSevice.GetByUsuario(usuariosEncontrados[0]);
+            result.Usuario = usuariosEncontrados[0];
+            result.Carteira = carteira;
+            return response.json(result);
         }
 
         const usuarioSeguro = await _security.GerarUsuarioSeguro(<IUsuarioSecurity>usuario);
-        UsuarioBuilder.ConverterInterface(<IUsuario>usuarioSeguro);
-        const result: any = await _usuarioRepository.Insert(<IUsuario>usuarioSeguro);
-        if (result._id) {
+        const usuarioSalvo: IUsuario = await _usuarioRepository.Insert(<IUsuario>usuarioSeguro);
+        result.Usuario = usuarioSalvo;
+
+        if (usuarioSalvo._id) {
             const carteira = await _carteiraSevice.CriarCarteira(usuario);
             const transacao = await _transacaoSevice.Depositar(carteira._id, '', 500, '', 0);
             result.Carteira = carteira;
-            result.Transacao = transacao;
         }
 
         return response.json(result);

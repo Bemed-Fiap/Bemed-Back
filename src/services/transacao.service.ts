@@ -1,16 +1,15 @@
-import { TransacaoBuilder } from './../models/transacao.builder';
-import { TransacaoRepository } from "../database/transacao.repository";
-import { CarteiraRepository } from "../database/Carteira.repository";
+import TransacaoBuilder from './../models/transacao.builder';
+import TransacaoRepository from "../database/transacao.repository";
+import CarteiraRepository from "../database/Carteira.repository";
 import moment from "moment";
-import TipoTransacao from "../utils/TipoTransacao";
+import TipoTransacao from "../utils/tipo-transacao.type";
 import ITransacao from "../models/interfaces/transacao.interface";
-import { ObjectId } from 'bson';
 
 const _transacao = new TransacaoRepository();
 const _carteira = new CarteiraRepository();
 const _builder = new TransacaoBuilder();
 
-export class TransacaoService {
+export default class TransacaoService {
     async Depositar(carteiraId: string, farmaciaId: string, valor: number, produtoId: string = null, produtoQuantidade: number = 0): Promise<ITransacao> {
         const transacao = await _transacao.Insert(_builder
             .setCarteiraDestinoId(carteiraId)

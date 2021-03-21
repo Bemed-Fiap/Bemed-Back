@@ -1,3 +1,4 @@
+//Essa classe foi extraída da internet.
 "use strict";
 
 /**
