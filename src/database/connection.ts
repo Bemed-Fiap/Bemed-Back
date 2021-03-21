@@ -11,7 +11,7 @@ export class MongoConnection {
     private collecionName: string;
 
     constructor(collection: string) {
-        this.instance = new MongoClient(url);
+        this.instance = new MongoClient(url, { useUnifiedTopology: true });
         this.collecionName = collection;
     }
 

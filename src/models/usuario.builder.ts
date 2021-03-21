@@ -12,8 +12,8 @@ export class UsuarioBuilder {
         salt: null,
         senha: null
     }
-    ConverterInterface(usuario: IUsuario) {
-        var keys = Object.keys(this.entity);
+    static ConverterInterface(usuario: IUsuario) {
+        var keys = ['_id', 'Endereco', 'documento', 'email', 'nascimento', 'nome', 'sobrenome', 'salt', 'senha']
         var keysRemove = Object.keys(usuario).filter(_ => keys.indexOf(_) == -1);
         for (const key of keysRemove) delete usuario[key];
     }
