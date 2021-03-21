@@ -1,16 +1,16 @@
-import TipoTransacao from "../../utils/TipoTransacao";
+import TipoTransacao from "../../utils/tipo-transacao.type";
 
 export default interface ITransacao {
-    _id: string,
+    _id: string
     
-    farmaciaId: string,
+    farmaciaId: string
     
-    produtoId: string,
+    produtoId: string
     quantidadeProduto: number
-    valor: number,
-    carteiraDestinoId: string,
-    tipoTransacao: TipoTransacao,
+    valor: number
+    carteiraDestinoId: string
+    tipoTransacao: TipoTransacao
 
-    dtCriacao: Date,
-    dtAlteracao: Date,
+    dtCriacao: Date
+    dtAlteracao: Date
 }

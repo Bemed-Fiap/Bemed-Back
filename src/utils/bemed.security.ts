@@ -6,7 +6,7 @@ env.config();
 
 const secret = process.env.SECRET || '0011223344556677';
 
-export class BemedSecurity {
+export default class BemedSecurity {
 
     async GerarUsuarioSeguro(usuario: IUsuarioSecurity): Promise<IUsuarioSecurity> {
         usuario.salt = uuid.v4().toString().replace(/-/g, '').substring(0, 16);

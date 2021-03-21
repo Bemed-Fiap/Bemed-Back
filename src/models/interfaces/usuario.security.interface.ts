@@ -1,4 +1,4 @@
 export default interface IUsuarioSecurity {
-    senha: string;
-    salt: string;
+    senha: string
+    salt: string
 }
