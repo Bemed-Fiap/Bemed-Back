@@ -1,24 +1,18 @@
 import * as CryptoJS from 'crypto-js';
 import * as uuid from 'uuid';
-import IUsuario from '../models/interfaces/usuario.interface';
 import IFarmacia from '../models/interfaces/farmacia.interface';
+import ILoginSecurity from '../models/interfaces/login.security.interface';
 import env from 'dotenv';
 env.config();
 
 const secret = process.env.SECRET || '0011223344556677';
 
-export class BemedSecurity {
+export default class BemedSecurity {
 
-    async GerarUsuarioSeguro(usuario: IUsuario): Promise<IUsuario> {
+    async GerarCadastroSeguro(usuario: ILoginSecurity): Promise<ILoginSecurity> {
         usuario.salt = uuid.v4().toString().replace(/-/g, '').substring(0, 16);
         usuario.senha = this.Criptografar(usuario.senha, usuario.salt);
         return usuario;
-    }
-
-    async GerarFarmaciaSeguro(farmacia: IFarmacia): Promise<IFarmacia> {
-        farmacia.salt = uuid.v4().toString().replace(/-/g, '').substring(0, 16);
-        farmacia.senha = this.Criptografar(farmacia.senha, farmacia.salt);
-        return farmacia;
     }
 
     Criptografar(valor: string, salt: string): string {

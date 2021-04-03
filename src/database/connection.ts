@@ -5,13 +5,13 @@ env.config();
 const url = process.env.MONGOURL;
 const dbName = process.env.MONGODATABASE;
 
-export class MongoConnection {
+export default class MongoConnection {
     instance: MongoClient;
     db: Db;
     private collecionName: string;
 
     constructor(collection: string) {
-        this.instance = new MongoClient(url);
+        this.instance = new MongoClient(url, { useUnifiedTopology: true });
         this.collecionName = collection;
     }
 

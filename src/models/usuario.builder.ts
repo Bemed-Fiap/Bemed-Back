@@ -1,7 +1,8 @@
+import BaseBuilder from "./base.builder";
 import IUsuario from "./interfaces/usuario.interface";
 
-export class UsuarioBuilder {
-    private entity: IUsuario = {
+export default class UsuarioBuilder extends BaseBuilder<IUsuario> {
+    protected entity: IUsuario = {
         _id: null,
         Endereco: null,
         documento: null,
@@ -11,11 +12,6 @@ export class UsuarioBuilder {
         sobrenome: null,
         salt: null,
         senha: null
-    }
-    ConverterInterface(usuario: IUsuario) {
-        var keys = Object.keys(this.entity);
-        var keysRemove = Object.keys(usuario).filter(_ => keys.indexOf(_) == -1);
-        for (const key of keysRemove) delete usuario[key];
     }
     setEndereco = (valor: any) => {
         this.entity.Endereco = valor;
@@ -41,5 +37,12 @@ export class UsuarioBuilder {
         this.entity.sobrenome = valor;
         return this;
     }
-    Build = () => this.entity;
+    setSalt = (valor: any) => {
+        this.entity.salt = valor;
+        return this;
+    }
+    setSenha = (valor: any) => {
+        this.entity.senha = valor;
+        return this;
+    }
 }

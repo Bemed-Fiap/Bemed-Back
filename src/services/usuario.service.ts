@@ -1,54 +1,49 @@
-import IUsuario from "../models/interfaces/usuario.interface";
-import { UsuarioRepository } from '../database/usuario.repository';
-import { UsuarioBuilder } from './../models/usuario.builder';
-import { BemedSecurity } from '../utils/bemed.security';
 import { Request, Response } from 'express';
+import IUsuario from "../models/interfaces/usuario.interface";
+import UsuarioRepository from '../database/usuario.repository';
+import BemedSecurity from '../utils/bemed.security';
+import IUsuarioSecurity from "../models/interfaces/usuario.security.interface";
+import CarteiraService from './carteira.service';
+import TransacaoService from './transacao.service';
+import ICarteira from "../models/interfaces/Carteira.interface";
+
 const _usuarioRepository = new UsuarioRepository();
 const _security = new BemedSecurity();
-const _builder = new UsuarioBuilder();
+const _carteiraSevice = new CarteiraService();
+const _transacaoSevice = new TransacaoService();
 
-export class UsuarioService {
 
-    async Get(request: Request, response: Response): Promise<Response> {
-        const { id } = request.params;
-        const { nome } = request.query;
 
-        let result: IUsuario[];
-
-        if (id) { result = [await _usuarioRepository.GetById(id)]; }
-        else if (nome) { result = await _usuarioRepository.Many({ nome: nome }); }
-        else { result = await _usuarioRepository.All(); }
-
-        return response.json(result);
+export default class UsuarioService {
+    async BuscarPorId(id: string): Promise<IUsuario> {
+        return await _usuarioRepository.GetById(id);
     }
 
-    async Post(request: Request, response: Response): Promise<Response> {
-        const usuario = request.body as IUsuario;
-        const usuarioSeguro = await _security.GerarUsuarioSeguro(usuario);
-        _builder.ConverterInterface(usuarioSeguro);
-        const result = await _usuarioRepository.Insert(usuarioSeguro);
+    async BuscarPor(usuario: IUsuario): Promise<IUsuario[]> {
+        return await _usuarioRepository.Many(usuario);
+    }
 
-        return response.json(result);
+    async BuscarTodos(): Promise<IUsuario[]> {
+        return await _usuarioRepository.All();
+    }
+
+    async Criar(usuario: IUsuario): Promise<IUsuario> {
+
+        const usuariosEncontrados = await _usuarioRepository.Many({ email: usuario.email });
+
+        if (usuariosEncontrados.length > 0) {
+            _carteiraSevice.CriarCarteira(usuariosEncontrados[0]);
+            return usuariosEncontrados[0];
+        }
+
+        const usuarioSeguro = await _security.GerarUsuarioSeguro(<IUsuarioSecurity>usuario);
+        const usuarioSalvo: IUsuario = await _usuarioRepository.Insert(<IUsuario>usuarioSeguro);
+
+        if (usuarioSalvo._id) {
+            const carteira = await _carteiraSevice.CriarCarteira(usuario);
+            const transacao = await _transacaoSevice.Depositar(carteira._id, '', 500, '', 0);
+        }
+
+        return usuarioSalvo;
     }
 }
-
-/*
-builder
-.setDocumento('10101010133')
-.setEmail('mail@mail.com')
-.setEndereco(enderecoBuilder
-    .setCep('09999999')
-    .setComplemento('Bloco x Apto y')
-    .setInfo('Próximo ao metro z')
-    .setNumero(41)
-    .setRua('Rua A')
-    .setBairro('Bairro B')
-    .setCidade('Cidade C')
-    .setEstado('Estado D')
-    .Build())
-.setNascimento(new Date(2000, 1, 1))
-.setNome('Joãozitos')
-.setSobrenome('Goianinhas')
-.setUsuario('goianinha')
-.Build()
-*/
