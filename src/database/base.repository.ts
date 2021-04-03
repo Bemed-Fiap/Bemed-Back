@@ -30,8 +30,8 @@ export default abstract class BaseRepository<T> {
         return result;
     }
     
-    async Many(mongoFind: any): Promise<T[]> {
-        const result = await this.connection.collection.find(mongoFind).toArray();
+    async Many(query: FilterQuery<T>): Promise<T[]> {
+        const result = await this.connection.collection.find(query).toArray();
         return result;
     }
 

@@ -1,27 +1,29 @@
 import express from 'express';
-import UsuarioService from './../services/usuario.service';
-import LoginService from './../services/login.service';
-import ProdutoService from './../services/produto.service';
 import TokenMiddleware from './../middleware/token.middleware';
+import UsuarioController from '../controllers/usuario.controller';
+import ProdutoController from '../controllers/produto.controller';
+import LoginController from '../controllers/login.controller';
 
 const routes = express.Router();
-const _usuarioService = new UsuarioService();
-const _produtoService = new ProdutoService();
-const _loginService = new LoginService();
+const _usuario = new UsuarioController();
+const _produto = new ProdutoController();
+const _login = new LoginController();
 const _tokenMiddleware = new TokenMiddleware();
 
 routes.get('/', async (req, res) => { return res.send('Hello Bemed, I\'m working ♥'); });
 
-routes.get('/usuario/', _usuarioService.Get);
-routes.get('/usuario/:id', _usuarioService.Get);
-routes.post('/usuario', _usuarioService.Post);
+routes.get('/usuario/', _usuario.Get);
+routes.get('/usuario/:id', _usuario.Get);
+routes.post('/usuario', _usuario.Post);
 
-routes.get('/produto/', _tokenMiddleware.Validate, _produtoService.Get);
-routes.get('/produto/:id', _tokenMiddleware.Validate, _produtoService.Get);
-routes.post('/produto', _tokenMiddleware.Validate, _produtoService.Post);
+routes.get('/produto/', _tokenMiddleware.Validate, _produto.Get);
+routes.get('/produto/:id', _tokenMiddleware.Validate, _produto.Get);
+routes.post('/produto', _tokenMiddleware.Validate, _produto.Post);
 
-routes.post('/signin', _loginService.Login);
-routes.post('/signup', _usuarioService.Post);
+routes.post('/signin', _login.Post);
+routes.post('/signup', _usuario.Post);
+
+routes.post('/signup', _usuario.Post);
 
 routes.get('/tokentest', _tokenMiddleware.Validate, _tokenMiddleware.TestRoute);
 
