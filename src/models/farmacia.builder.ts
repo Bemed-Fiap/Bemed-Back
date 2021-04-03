@@ -1,7 +1,8 @@
+import BaseBuilder from "./base.builder";
 import IFarmacia from "./interfaces/farmacia.interface";
 
-export class FarmaciaBuilder {
-    private entity: IFarmacia = {
+export default class FarmaciaBuilder extends BaseBuilder<IFarmacia> {
+    protected entity: IFarmacia = {
         _id: null,
         Endereco: null,
         cnpj: null,
@@ -9,13 +10,9 @@ export class FarmaciaBuilder {
         razao: null,
         nomeFantasia: null,
         salt: null,
-        senha: null
+        senha: null,
     }
-    ConverterInterface(farmacia: IFarmacia) {
-        var keys = Object.keys(this.entity);
-        var keysRemove = Object.keys(farmacia).filter(_ => keys.indexOf(_) == -1);
-        for (const key of keysRemove) delete farmacia[key];
-    }
+
     setEndereco = (valor: any) => {
         this.entity.Endereco = valor;
         return this;
@@ -36,5 +33,12 @@ export class FarmaciaBuilder {
         this.entity.nomeFantasia = valor;
         return this;
     }
-    Build = () => this.entity;
+    setSalt = (valor: any) => {
+        this.entity.salt = valor;
+        return this;
+    }
+    setSenha = (valor: any) => {
+        this.entity.senha = valor;
+        return this;
+    }
 }

@@ -7,4 +7,8 @@ export default interface IEndereco {
     complemento: string
     cep: string
     info: string
+    coords: {
+        lat: number
+        lng: number
+    }
 }

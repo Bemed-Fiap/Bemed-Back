@@ -1,17 +1,14 @@
-import { Request, Response } from 'express';
 import IUsuario from "../models/interfaces/usuario.interface";
 import UsuarioRepository from '../database/usuario.repository';
 import BemedSecurity from '../utils/bemed.security';
-import IUsuarioSecurity from "../models/interfaces/usuario.security.interface";
+import IUsuarioSecurity from "../models/interfaces/login.security.interface";
 import CarteiraService from './carteira.service';
 import TransacaoService from './transacao.service';
-import ICarteira from "../models/interfaces/Carteira.interface";
 
 const _usuarioRepository = new UsuarioRepository();
 const _security = new BemedSecurity();
 const _carteiraSevice = new CarteiraService();
 const _transacaoSevice = new TransacaoService();
-
 
 
 export default class UsuarioService {
@@ -36,7 +33,7 @@ export default class UsuarioService {
             return usuariosEncontrados[0];
         }
 
-        const usuarioSeguro = await _security.GerarUsuarioSeguro(<IUsuarioSecurity>usuario);
+        const usuarioSeguro = await _security.GerarCadastroSeguro(<IUsuarioSecurity>usuario);
         const usuarioSalvo: IUsuario = await _usuarioRepository.Insert(<IUsuario>usuarioSeguro);
 
         if (usuarioSalvo._id) {

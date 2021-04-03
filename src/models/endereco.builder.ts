@@ -10,7 +10,11 @@ export default class EnderecoBuilder extends BaseBuilder<IEndereco> {
         rua: null,
         bairro: null,
         cidade: null,
-        estado: null
+        estado: null,
+        coords: {
+            lat: null,
+            lng: null
+        }
     }
     setCep = (valor: any) => {
         this.entity.cep = valor;
@@ -42,6 +46,18 @@ export default class EnderecoBuilder extends BaseBuilder<IEndereco> {
     }
     setEstado = (valor: any) => {
         this.entity.estado = valor;
+        return this;
+    }
+    setCoords = (valor: any) => {
+        this.entity.coords = valor;
+        return this;
+    }
+    setLat = (valor: any) => {
+        this.entity.coords.lat = valor;
+        return this;
+    }
+    setLng = (valor: any) => {
+        this.entity.coords.lng = valor;
         return this;
     }
 }

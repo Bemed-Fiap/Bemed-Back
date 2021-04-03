@@ -1,4 +1,3 @@
-import TipoMedidaDevolucao from "../../utils/tipo-medida-devolucao.type";
 import CategoriaProduto from "../../utils/categoria-produto.type";
 
 export default interface IProduto {

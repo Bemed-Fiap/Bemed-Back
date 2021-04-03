@@ -1,52 +1,37 @@
 import IFarmacia from "../models/interfaces/farmacia.interface";
-import { FarmaciaRepository } from '../database/farmacia.repository';
-import { FarmaciaBuilder } from './../models/farmacia.builder';
-import { BemedSecurity } from '../utils/bemed.security';
-import { Request, Response } from 'express';
+import FarmaciaRepository from '../database/farmacia.repository';
+import FarmaciaBuilder from './../models/farmacia.builder';
+import BemedSecurity from '../utils/bemed.security';
+import ILoginSecurity from "../models/interfaces/login.security.interface";
+
 const _farmaciaRepository = new FarmaciaRepository();
 const _security = new BemedSecurity();
-const _builder = new FarmaciaBuilder();
 
-export class FarmaciaService {
+export default class FarmaciaService {
 
-    async Get(request: Request, response: Response): Promise<Response> {
-        const { id } = request.params;
-        const { nome } = request.query;
-
-        let result: IFarmacia[];
-
-        if (id) { result = [await _farmaciaRepository.GetById(id)]; }
-        else if (nome) { result = await _farmaciaRepository.Many({ nome: nome }); }
-        else { result = await _farmaciaRepository.All(); }
-
-        return response.json(result);
+    async BuscarPorId(id: string): Promise<IFarmacia> {
+        return await _farmaciaRepository.GetById(id);
     }
 
-    async Post(request: Request, response: Response): Promise<Response> {
-        const farmacia = request.body as IFarmacia;
-        const farmaciaSeguro = await _security.GerarFarmaciaSeguro(farmacia);
-        _builder.ConverterInterface(farmaciaSeguro);
-        const result = await _farmaciaRepository.Insert(farmaciaSeguro);
+    async BuscarPor(usuario: IFarmacia): Promise<IFarmacia[]> {
+        return await _farmaciaRepository.Many(usuario);
+    }
 
-        return response.json(result);
+    async BuscarTodos(): Promise<IFarmacia[]> {
+        return await _farmaciaRepository.All();
+    }
+
+    async Criar(farmacia: IFarmacia): Promise<IFarmacia> {
+
+        const farmaciasEncontrados = await _farmaciaRepository.Many({ email: farmacia.email });
+
+        if (farmaciasEncontrados.length > 0) {
+            return farmaciasEncontrados[0];
+        }
+
+        const farmaciaSegura = await _security.GerarCadastroSeguro(<ILoginSecurity>farmacia);
+        const farmaciaSalva: IFarmacia = await _farmaciaRepository.Insert(<IFarmacia>farmaciaSegura);
+
+        return farmaciaSalva;
     }
 }
-
-/*
-builder
-.setCnpj('60387635000115')
-.setEmail('mail@mail.com')
-.setEndereco(enderecoBuilder
-    .setCep('09999999')
-    .setComplemento('Bloco x Apto y')
-    .setInfo('Próximo ao metro z')
-    .setNumero(41)
-    .setRua('Rua A')
-    .setBairro('Bairro B')
-    .setCidade('Cidade C')
-    .setEstado('Estado D')
-    .Build())
-.setRazao('Drogaria São Paulo S.a.')
-.setNomeFantasia('Drogaria São Paulo')
-.Build()
-*/
