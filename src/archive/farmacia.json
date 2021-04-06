@@ -1,0 +1,16 @@
+{
+    "Endereco": {
+      "cep": "09999999",
+      "complemento": "Bloco x Apto y",
+      "info": "Próximo ao metro z",
+      "numero": 41,
+      "rua": "Rua A",
+      "bairro": "Bairro B",
+      "cidade": "Cidade C",
+      "estado": "Estado D"
+    },
+    "cnpj": "60387635000115",
+    "email": "mail@mail.com",
+    "razao": "Drogaria São Paulo S.a.",
+    "nomeFantasia": "Drogaria São Paulo"
+  }
