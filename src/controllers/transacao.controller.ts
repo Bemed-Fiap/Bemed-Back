@@ -2,13 +2,15 @@ import { Request, Response } from 'express';
 import IUsuario from '../models/interfaces/usuario.interface';
 import TransacaoService from '../services/Transacao.service';
 import UsuarioService from '../services/usuario.service';
-import FarmaciaService from '../services/farmacia.service';
+import ProdutoService from '../services/produto.service';
+import CarteiraService from '../services/carteira.service';
 import HttpStatusCode from '../utils/https-statuscode.type';
 import ITransacao from "./../models/interfaces/Transacao.interface";
-import TransacaoBuilder from './../models/Transacao.builder';
 
 const _transacaoService = new TransacaoService();
 const _usuarioService = new UsuarioService();
+const _produtoService = new ProdutoService();
+const _carteiraService = new CarteiraService();
 
 interface ITransacaoServiceResponse {
     mensagem: string,
@@ -17,9 +19,20 @@ interface ITransacaoServiceResponse {
 }
 
 interface ITransacaoServiceRequest {
-    documento: string,
-    sucesso: boolean,
-    Transacao: ITransacao
+    documento: string;
+    idFarmacia: string;
+    idProduto: string;
+
+    comBula: boolean;
+    comReceita: boolean;
+    comCaixa: boolean;
+    comNotaFiscal: boolean;
+    dentroDaValidade: boolean;
+
+    quantidade: number;
+
+    sucesso: boolean;
+    Transacao: ITransacao;
 }
 
 export default class TransacaoController {
@@ -28,16 +41,23 @@ export default class TransacaoController {
         try {
 
             const transacaoRequest = <ITransacaoServiceRequest>request.body;
-            const usuario = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
-            const usuario = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
 
-            if (usuario.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
+            const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
+            if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
+            const usuario = <IUsuario>usuarios[0];
 
-            const TransacaoSalvo = await _transacaoService.Depositar(usuario, );
+            const produto = await _produtoService.BuscarPorId(transacaoRequest.idProduto);
+            const carteira = await _carteiraService.GetByUsuario(usuario);
+
+            const pontos = await _transacaoService.CalcularPontos(produto, transacaoRequest.comBula, transacaoRequest.comReceita,
+                transacaoRequest.comCaixa, transacaoRequest.comNotaFiscal, transacaoRequest.dentroDaValidade);
+
+            const transacao = await _transacaoService.Depositar(carteira._id, transacaoRequest.idFarmacia,
+                pontos, produto._id, transacaoRequest.quantidade);
 
             return response.json({
-                Transacao: TransacaoSalvo,
-                id: TransacaoSalvo._id.toString(),
+                Transacao: transacao,
+                id: transacao._id.toString(),
                 mensagem: 'Salvo com sucesso!',
                 sucesso: true
             });
@@ -50,5 +70,9 @@ export default class TransacaoController {
                 sucesso: false
             })
         }
+    }
+
+    async AprovarDesconto() { //Todo
+
     }
 }

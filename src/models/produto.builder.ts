@@ -7,13 +7,14 @@ export default class ProdutoBuilder extends BaseBuilder<IProduto> {
     protected entity: IProduto = {
         _id: null,
         categoria: null,
-        comBula: null,
-        comCaixa: null,
-        comNF: null,
-        comReceita: null,
+        exigeBula: null,
+        exigeCaixa: null,
+        exigeNF: null,
+        exigeReceita: null,
         dosagem: null,
         nome: null,
-        fotoBase64: null
+        fotoBase64: null,
+        pontosPorUnidade: null
         //tipoMedidaDevolucao: null,
     }
 
@@ -21,20 +22,20 @@ export default class ProdutoBuilder extends BaseBuilder<IProduto> {
         this.entity.categoria = value;
         return this;
     }
-    setComBula = (value: any)=>{
-        this.entity.comBula = value;
+    setExigeBula = (value: any)=>{
+        this.entity.exigeBula = value;
         return this;
     }
-    setComCaixa = (value: any)=>{
-        this.entity.comCaixa = value;
+    setExigeCaixa = (value: any)=>{
+        this.entity.exigeCaixa = value;
         return this;
     }
-    setComNF = (value: any)=>{
-        this.entity.comNF = value;
+    setExigeNF = (value: any)=>{
+        this.entity.exigeNF = value;
         return this;
     }
-    setComReceita = (value: any)=>{
-        this.entity.comReceita = value;
+    setExigeReceita = (value: any)=>{
+        this.entity.exigeReceita = value;
         return this;
     }
     setDosagem = (value: any)=>{
@@ -47,6 +48,10 @@ export default class ProdutoBuilder extends BaseBuilder<IProduto> {
     }
     setFotoBase64 = (value: any)=>{
         this.entity.fotoBase64 = value;
+        return this;
+    }
+    setPontosPorUnidade = (value: any)=>{
+        this.entity.pontosPorUnidade = value;
         return this;
     }
     // setTipoMedidaDevolucao = (value: TipoMedidaDevolucao)=>{

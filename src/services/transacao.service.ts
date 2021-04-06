@@ -4,6 +4,7 @@ import CarteiraRepository from "../database/Carteira.repository";
 import moment from "moment";
 import TipoTransacao from "../utils/tipo-transacao.type";
 import ITransacao from "../models/interfaces/transacao.interface";
+import IProduto from '../models/interfaces/produto.interface';
 
 const _transacao = new TransacaoRepository();
 const _carteira = new CarteiraRepository();
@@ -40,16 +41,30 @@ export default class TransacaoService {
         return transacao;
     }
 
+    async CalcularPontos(produto: IProduto, comBula: boolean, comReceita: boolean,
+        comCaixa: boolean, comNotaFiscal: boolean, dentroDaValidade: boolean): Promise<number> {
+            let pontosPorUnidade = produto.pontosPorUnidade;
+            let porcentagem = 0;
+            
+            if (comBula) porcentagem = porcentagem + 0.05;
+            if (comCaixa) porcentagem = porcentagem + 0.05;
+            if (comNotaFiscal) porcentagem = porcentagem + 0.05;
+            if (comReceita) porcentagem = porcentagem + 0.05;
+            if (dentroDaValidade) porcentagem = porcentagem + 0.1;
+
+            return pontosPorUnidade * porcentagem;
+    }
+
     private async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {
         const carteira = await _carteira.GetById(transacao.carteiraDestinoId);
         carteira.HistoricoTranscoes.push(transacao._id);
         carteira.dtAlteracao = moment().toDate();
-        carteira.pontos = this.CalcularPontos(carteira.pontos, transacao);
+        carteira.pontos = this.CalcularTransacao(carteira.pontos, transacao);
         await _carteira.Update({ _id: carteira._id, }, carteira);
         return true;
     }
 
-    private CalcularPontos(pontos: number, transacao: ITransacao): number {
+    private CalcularTransacao(pontos: number, transacao: ITransacao): number {
         let result = pontos || 0;
         switch (transacao.tipoTransacao) {
             case TipoTransacao.EntradaPontos:
