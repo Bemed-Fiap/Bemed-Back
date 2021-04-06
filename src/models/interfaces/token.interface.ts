@@ -1,6 +1,6 @@
 export default interface IToken {
     expires: Date
     usuarioId: string
-    usuarioEmail: string
+    usuarioDocumento: string
     roles: number[]
 }
