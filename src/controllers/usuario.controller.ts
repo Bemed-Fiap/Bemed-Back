@@ -22,7 +22,7 @@ export default class UsuarioController {
             const { nome } = request.query;
 
             let result: IUsuarioServiceResponse[] = [];
-            let usuarios: IUsuario[];
+            let usuarios: IUsuario[] = [];
 
             if (id) {
                 const usr = await _usuarioService.BuscarPorId(id);

@@ -12,4 +12,6 @@ export default interface IProduto {
     comCaixa: boolean //não
     comReceita: boolean //não
     comNF: boolean //sim
+
+    fotoBase64: string
 }

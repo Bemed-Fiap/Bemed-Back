@@ -13,6 +13,7 @@ export default class ProdutoBuilder extends BaseBuilder<IProduto> {
         comReceita: null,
         dosagem: null,
         nome: null,
+        fotoBase64: null
         //tipoMedidaDevolucao: null,
     }
 
@@ -42,6 +43,10 @@ export default class ProdutoBuilder extends BaseBuilder<IProduto> {
     }
     setNome = (value: any)=>{
         this.entity.nome = value;
+        return this;
+    }
+    setFotoBase64 = (value: any)=>{
+        this.entity.fotoBase64 = value;
         return this;
     }
     // setTipoMedidaDevolucao = (value: TipoMedidaDevolucao)=>{

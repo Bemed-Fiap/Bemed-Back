@@ -21,6 +21,8 @@ export default class TokenMiddleware {
         const roles = tokenDecifrado.roles.filter(_ => allowedRoles.indexOf(_) > -1);
 
         if (moment(tokenDecifrado.expires) > moment(new Date()) && roles.length > 0) {
+            request['usr'] = tokenDecifrado.usuarioId;
+            request['email'] = tokenDecifrado.usuarioEmail;
             next();
         }
         else {

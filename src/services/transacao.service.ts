@@ -16,7 +16,7 @@ export default class TransacaoService {
             .setFarmaciaId(farmaciaId)
             .setProdutoId(produtoId)
             .setQuantidadeProduto(produtoQuantidade)
-            .setTipoTransacao(TipoTransacao.Entrada)
+            .setTipoTransacao(TipoTransacao.EntradaPontos)
             .setValor(valor)
             .setDtCriacao(moment().toDate())
             .setDtAlteracao(moment().toDate()).Build()
@@ -31,7 +31,7 @@ export default class TransacaoService {
             .setFarmaciaId(farmaciaId)
             .setProdutoId(produtoId)
             .setQuantidadeProduto(produtoQuantidade)
-            .setTipoTransacao(TipoTransacao.Saida)
+            .setTipoTransacao(TipoTransacao.SaidaPontos)
             .setValor(valor)
             .setDtCriacao(moment().toDate())
             .setDtAlteracao(moment().toDate()).Build()
@@ -52,11 +52,11 @@ export default class TransacaoService {
     private CalcularPontos(pontos: number, transacao: ITransacao): number {
         let result = pontos || 0;
         switch (transacao.tipoTransacao) {
-            case TipoTransacao.Entrada:
+            case TipoTransacao.EntradaPontos:
                 result = result + (transacao.valor * 1);
                 break;
-            case TipoTransacao.Entrada:
-                result = result + (transacao.valor * 1);
+            case TipoTransacao.SaidaPontos:
+                result = result - (transacao.valor * 1);
                 break;
         }
         return result;
