@@ -28,11 +28,8 @@ routes.get('/produto/', _tokenMiddleware.Validate, _produto.Get);
 routes.get('/produto/:id', _tokenMiddleware.Validate, _produto.Get);
 routes.post('/produto', _tokenMiddleware.Validate, _produto.Post);
 
-routes.post('/u/signin', _login.Post);
-routes.post('/u/signup', _usuario.Post);
-
-routes.post('/f/signin', _login.Post);
-routes.post('/f/signup', _usuario.Post);
+routes.post('/login', _login.Post);
+routes.post('/signup', _usuario.Post);
 
 routes.get('/tokentest', _tokenMiddleware.Validate, _tokenMiddleware.TestRoute);
 
