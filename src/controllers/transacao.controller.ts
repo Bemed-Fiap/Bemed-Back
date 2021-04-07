@@ -20,7 +20,6 @@ interface ITransacaoServiceResponse {
 
 interface ITransacaoServiceRequest {
     documento: string;
-    idFarmacia: string;
     idProduto: string;
 
     comBula: boolean;
@@ -30,9 +29,6 @@ interface ITransacaoServiceRequest {
     dentroDaValidade: boolean;
 
     quantidade: number;
-
-    sucesso: boolean;
-    Transacao: ITransacao;
 }
 
 export default class TransacaoController {
@@ -41,7 +37,7 @@ export default class TransacaoController {
         try {
 
             const transacaoRequest = <ITransacaoServiceRequest>request.body;
-
+            const idFarmacia = request['usr'];
             const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
             if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
             const usuario = <IUsuario>usuarios[0];
@@ -52,8 +48,8 @@ export default class TransacaoController {
             const pontos = await _transacaoService.CalcularPontos(produto, transacaoRequest.comBula, transacaoRequest.comReceita,
                 transacaoRequest.comCaixa, transacaoRequest.comNotaFiscal, transacaoRequest.dentroDaValidade);
 
-            const transacao = await _transacaoService.Depositar(carteira._id, transacaoRequest.idFarmacia,
-                pontos, produto._id, transacaoRequest.quantidade);
+            const transacao = await _transacaoService.Depositar(carteira._id, idFarmacia, pontos,
+                produto._id, transacaoRequest.quantidade);
 
             return response.json({
                 Transacao: transacao,

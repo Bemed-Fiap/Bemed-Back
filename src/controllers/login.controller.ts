@@ -13,32 +13,43 @@ const _loginService = new LoginService();
 
 export default class LoginController {
     async Post(request: Request, response: Response): Promise<Response> {
-        const { documento, senha } = request.headers;
-        let id = '';
-        let usuarios: any[];
-        let usuario: any;
-        
-        if (documento.toString().length > 11) {
-            usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: documento.toString() });
-            if (usuarios.length == 0) return response.status(HttpStatusCode.BAD_REQUEST);
-            if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT);
-            usuario = usuarios[0];
-            id = (<IUsuario>usuario)._id;
-        }
-        else {
-            usuarios = await _farmaciaService.BuscarPor(<IFarmacia>{ cnpj: documento.toString() });
-            if (usuarios.length == 0) return response.status(HttpStatusCode.BAD_REQUEST);
-            if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT);
-            usuario = usuarios[0];
-            id = (<IFarmacia>usuario)._id;
+        try {
+            const { documento, senha } = request.headers;
+
+            if (!documento || !senha) return response.status(HttpStatusCode.BAD_REQUEST);
+
+            let id = '';
+            let usuarios: any[];
+            let usuario: any;
+            let role = '';
+
+            if (documento?.toString().length > 11) {
+                usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: documento?.toString() });
+                if (usuarios.length == 0) return response.status(HttpStatusCode.BAD_REQUEST);
+                if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT);
+                usuario = usuarios[0];
+                id = (<IUsuario>usuario)._id;
+                role = 'Usuario';
+            }
+            else {
+                usuarios = await _farmaciaService.BuscarPor(<IFarmacia>{ cnpj: documento?.toString() });
+                if (usuarios.length == 0) return response.status(HttpStatusCode.BAD_REQUEST);
+                if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT);
+                usuario = usuarios[0];
+                id = (<IFarmacia>usuario)._id;
+                role = 'Farmacia';
+            }
+
+            const token = await _loginService.Login(id, documento?.toString(), <ILoginSecurity>usuario, senha?.toString());
+
+            if (token) {
+                return response.json({ token, role });
+            }
+
+            return response.status(HttpStatusCode.FORBIDDEN);
+        } catch {
+            return response.status(HttpStatusCode.BAD_REQUEST);
         }
 
-        const token = await _loginService.Login(id, documento.toString(), <ILoginSecurity> usuario, senha.toString());
-
-        if (token) {
-            return response.json({ token });
-        }
-
-        return response.status(HttpStatusCode.FORBIDDEN);
     }
 }
