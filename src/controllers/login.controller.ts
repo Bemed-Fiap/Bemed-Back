@@ -15,6 +15,7 @@ export default class LoginController {
     async Post(request: Request, response: Response): Promise<Response> {
         const { documento, senha } = request.headers;
         let id = '';
+        let role = '';
         let usuarios: any[];
         let usuario: any;
         
@@ -24,6 +25,7 @@ export default class LoginController {
             if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT);
             usuario = usuarios[0];
             id = (<IUsuario>usuario)._id;
+            role = 'Usuario';
         }
         else {
             usuarios = await _farmaciaService.BuscarPor(<IFarmacia>{ cnpj: documento.toString() });
@@ -31,12 +33,13 @@ export default class LoginController {
             if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT);
             usuario = usuarios[0];
             id = (<IFarmacia>usuario)._id;
+            role = 'Farmacia';
         }
 
         const token = await _loginService.Login(id, documento.toString(), <ILoginSecurity> usuario, senha.toString());
 
         if (token) {
-            return response.json({ token });
+            return response.json({ token, role });
         }
 
         return response.status(HttpStatusCode.FORBIDDEN);
