@@ -43,10 +43,10 @@ export default class ProdutoController {
 
             const produto = builder
                 .setCategoria(produtoRequest.categoria)
-                .setComBula(produtoRequest.comBula)
-                .setComCaixa(produtoRequest.comCaixa)
-                .setComNF(produtoRequest.comNF)
-                .setComReceita(produtoRequest.comReceita)
+                .setExigeBula(produtoRequest.comBula)
+                .setExigeCaixa(produtoRequest.comCaixa)
+                .setExigeNF(produtoRequest.comNF)
+                .setExigeReceita(produtoRequest.comReceita)
                 .setDosagem(produtoRequest.dosagem)
                 .setNome(produtoRequest.nome)
                 //.setTipoMedidaDevolucao(produtoRequest.tipoMedidaDevolucao)
