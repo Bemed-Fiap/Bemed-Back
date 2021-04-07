@@ -22,7 +22,7 @@ export default class TokenMiddleware {
 
         if (moment(tokenDecifrado.expires) > moment(new Date()) && roles.length > 0) {
             request['usr'] = tokenDecifrado.usuarioId;
-            request['email'] = tokenDecifrado.usuarioEmail;
+            request['documento'] = tokenDecifrado.usuarioDocumento;
             next();
         }
         else {

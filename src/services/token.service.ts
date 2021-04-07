@@ -14,7 +14,7 @@ export default class TokenService {
         const tokenData: IToken = {
             expires: moment().add(TOKENEXPIRATION, 'minute').toDate(),
             roles: [SecurityRoles.UsuarioPessoaFisica],
-            usuarioEmail: loginData.usuario,
+            usuarioDocumento: loginData.documento,
             usuarioId: loginData._id
         }
         const tokenStructString = JSON.stringify(tokenData);
