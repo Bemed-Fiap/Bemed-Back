@@ -31,11 +31,11 @@ export default class TokenMiddleware {
         }
     }
 
-    async TestRoute(req, res) {
-        return res.json({ congrats: 'You are in!' });
+    async TestRoute(request: Request, response: Response) {
+        return response.json({ congrats: 'You are in!' });
     }
 
     static Forbidden(response: Response) {
-        return response.status(HttpStatusCode.FORBIDDEN).send();
+        return response.status(HttpStatusCode.UNAUTHORIZED).send();
     }
 }

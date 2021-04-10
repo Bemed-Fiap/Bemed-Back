@@ -8,6 +8,11 @@ const _farmaciaService = new FarmaciaService();
 
 interface IFarmaciaServiceResponse {
     Farmacia: IFarmacia
+    nome: string,
+    endereco: string,
+    cep: string,
+    phone: string,
+    location: number[]
 }
 
 export default class FarmaciaController {
@@ -27,7 +32,14 @@ export default class FarmaciaController {
             else if (nomeFantasia) { farmacias = await _farmaciaService.BuscarPor(<IFarmacia>{ nomeFantasia: nomeFantasia.toString() }); }
             else { farmacias = await _farmaciaService.BuscarTodos(); }
 
-            farmacias.forEach(_ => result.push({ Farmacia: _ }));
+            farmacias.forEach(_ => result.push({
+                Farmacia: _,
+                nome: _.nomeFantasia,
+                cep: _.Endereco.cep,
+                endereco: `${_.Endereco.rua} nr ${_.Endereco.numero} comp ${_.Endereco.complemento}, ${_.Endereco.bairro} - ${_.Endereco.cidade} ${_.Endereco.estado}`,
+                location: [_.Endereco.coords.lng, _.Endereco.coords.lat],
+                phone: _.telefone
+            }));
 
             if (result.length > 0) return response.json(result);
             return response.sendStatus(HttpStatusCode.BAD_REQUEST);
@@ -50,13 +62,18 @@ export default class FarmaciaController {
             .setSenha(farmaciaRequest.senha)
             .Build();
 
+
+
+        const _ = await _farmaciaService.Criar(Farmacia);
+
         const result: IFarmaciaServiceResponse = {
-            Farmacia: null
+            Farmacia: _,
+            nome: _.nomeFantasia,
+            cep: _.Endereco.cep,
+            endereco: `${_.Endereco.rua} nr ${_.Endereco.numero} comp ${_.Endereco.complemento}, ${_.Endereco.bairro} - ${_.Endereco.cidade} ${_.Endereco.estado}`,
+            location: [_.Endereco.coords.lng, _.Endereco.coords.lat],
+            phone: _.telefone
         };
-
-        const FarmaciaSalvo = await _farmaciaService.Criar(Farmacia);
-
-        result.Farmacia = FarmaciaSalvo;
 
         return response.json(result);
     }
