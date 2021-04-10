@@ -11,6 +11,7 @@ export default class FarmaciaBuilder extends BaseBuilder<IFarmacia> {
         nomeFantasia: null,
         salt: null,
         senha: null,
+        telefone: null
     }
 
     setEndereco = (valor: any) => {
@@ -39,6 +40,10 @@ export default class FarmaciaBuilder extends BaseBuilder<IFarmacia> {
     }
     setSenha = (valor: any) => {
         this.entity.senha = valor;
+        return this;
+    }
+    setTelefone = (valor: any) => {
+        this.entity.telefone = valor;
         return this;
     }
 }

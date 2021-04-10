@@ -20,8 +20,8 @@ routes.get('/usuario/', _usuario.Get);
 routes.get('/usuario/:id', _usuario.Get);
 routes.post('/usuario', _usuario.Post);
 
-routes.get('/farmacia/', _farmacia.Get);
-routes.get('/farmacia/:id', _farmacia.Get);
+routes.get('/farmacia/', _tokenMiddleware.Validate, _farmacia.Get);
+routes.get('/farmacia/:id', _tokenMiddleware.Validate, _farmacia.Get);
 routes.post('/farmacia', _farmacia.Post);
 
 routes.get('/produto/', _tokenMiddleware.Validate, _produto.Get);

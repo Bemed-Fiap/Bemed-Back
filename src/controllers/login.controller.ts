@@ -24,17 +24,20 @@ export default class LoginController {
             let role = '';
 
             if (documento?.toString().length > 11) {
+
                 usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: documento?.toString() });
-                if (usuarios.length == 0) return response.status(HttpStatusCode.BAD_REQUEST).send();
+                if (usuarios.length == 0) return response.status(HttpStatusCode.NOT_FOUND).send();
                 if (usuarios.length > 1) return response.status(HttpStatusCode.CONFLICT).send();
+
                 usuario = usuarios[0];
                 id = (<IUsuario>usuario)._id;
                 role = 'Usuario';
             }
             else {
                 usuarios = await _farmaciaService.BuscarPor(<IFarmacia>{ cnpj: documento?.toString() });
-                if (usuarios.length == 0) return response.status(<number>HttpStatusCode.BAD_REQUEST).send();
+                if (usuarios.length == 0) return response.status(<number>HttpStatusCode.NOT_FOUND).send();
                 if (usuarios.length > 1) return response.status(<number>HttpStatusCode.CONFLICT).send();
+                
                 usuario = usuarios[0];
                 id = (<IFarmacia>usuario)._id;
                 role = 'Farmacia';
@@ -46,10 +49,10 @@ export default class LoginController {
                 return response.json({ token, role });
             }
 
-            return response.status(<number>HttpStatusCode.FORBIDDEN).send();
+            return response.status(<number>HttpStatusCode.UNAUTHORIZED).send();
 
         } catch {
-            return response.status(<number>HttpStatusCode.BAD_REQUEST).send();
+            return response.status(<number>HttpStatusCode.INTERNAL_SERVER_ERROR).send();
         }
 
     }
