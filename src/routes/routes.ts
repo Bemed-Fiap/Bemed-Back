@@ -16,17 +16,14 @@ const _tokenMiddleware = new TokenMiddleware();
 
 routes.get('/', async (req, res) => { return res.send('Hello Bemed, I\'m working ♥'); });
 
-routes.get('/usuario/', _usuario.Get);
-routes.get('/usuarios/', _usuario.Get);
+routes.get('/usuario/', _tokenMiddleware.Validate, _usuario.GetMe);
+routes.get('/farmacia/', _tokenMiddleware.Validate, _farmacia.GetMe);
 
+routes.get('/usuarios/', _usuario.Get);
 routes.get('/usuario/:id', _usuario.Get);
 routes.get('/usuarios/:id', _usuario.Get);
 
-routes.get('/eu', _tokenMiddleware.Validate, _usuario.GetMe);
-
-routes.get('/farmacia/', _tokenMiddleware.Validate, _farmacia.Get);
 routes.get('/farmacias/', _tokenMiddleware.Validate, _farmacia.Get);
-
 routes.get('/farmacia/:id', _tokenMiddleware.Validate, _farmacia.Get);
 routes.get('/farmacias/:id', _tokenMiddleware.Validate, _farmacia.Get);
 
