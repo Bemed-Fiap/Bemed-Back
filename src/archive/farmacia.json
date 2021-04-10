@@ -1,5 +1,5 @@
 {
-    "Endereco": {
+  "Endereco": {
       "cep": "09999999",
       "complemento": "Bloco x Apto y",
       "info": "Próximo ao metro z",
@@ -7,10 +7,16 @@
       "rua": "Rua A",
       "bairro": "Bairro B",
       "cidade": "Cidade C",
-      "estado": "Estado D"
-    },
-    "cnpj": "60387635000115",
-    "email": "mail@mail.com",
-    "razao": "Drogaria São Paulo S.a.",
-    "nomeFantasia": "Drogaria São Paulo"
-  }
+      "estado": "Estado D",
+      "coords": {
+          "lat": -46.657819747924805,
+          "lng": -23.562020273063425
+      }
+  },
+  "cnpj": "10101010999999",
+  "email": "farmaisvc@mail.com",
+  "razao": "FarmaisVc",
+  "nomeFantasia": "FarmaisVC♥",
+  "telefone": "+55 11 99999-9999",
+  "senha": "abc123"
+}

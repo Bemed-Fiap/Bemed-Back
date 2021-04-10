@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 import ICarteira from '../models/interfaces/Carteira.interface';
 import IUsuario from '../models/interfaces/usuario.interface';
 import UsuarioBuilder from './../models/usuario.builder';
@@ -26,7 +26,7 @@ export default class UsuarioController {
 
             if (id) {
                 const usr = await _usuarioService.BuscarPorId(id);
-                if(usr) usuarios.push(usr);
+                if (usr) usuarios.push(usr);
             }
             else if (nome) { usuarios = await _usuarioService.BuscarPor(<IUsuario>{ nome: nome.toString() }); }
             else { usuarios = await _usuarioService.BuscarTodos(); }
@@ -42,6 +42,12 @@ export default class UsuarioController {
         }
     }
 
+    async GetMe(request: Request, response: Response): Promise<Response<IUsuario>> {
+        const id = request['usr'];
+        const usr = await _usuarioService.BuscarPorId(id);
+        return response.json(usr);
+    }
+
     async Post(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse>> {
         const builder = new UsuarioBuilder();
         const usuarioRequest = request.body;
@@ -49,7 +55,7 @@ export default class UsuarioController {
         const usuario = builder
             .setDocumento(usuarioRequest.documento)
             .setEmail(usuarioRequest.email)
-            .setEndereco(usuarioRequest.endereco)
+            .setEndereco(usuarioRequest.Endereco)
             .setNascimento(usuarioRequest.nascimento)
             .setNome(usuarioRequest.nome)
             .setSobrenome(usuarioRequest.sobrenome)

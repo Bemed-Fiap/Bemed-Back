@@ -10,10 +10,9 @@
     "estado": "Estado D"
   },
   "documento": "10101010133",
-  "email": "mail@mail.com",
+  "email": "michel@mail.com",
   "nascimento": "2000-02-01T02:00:00.000Z",
-  "nome": "Joãozitos",
-  "sobrenome": "Goianinhas",
-  "senha": "abc123",
-  "salt": "10203010203020101020301020302010"
+  "nome": "MICHEL",
+  "sobrenome": "SANTANA",
+  "senha": "abc123"
 }
