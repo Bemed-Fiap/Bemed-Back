@@ -18,7 +18,7 @@ interface ITransacaoServiceResponse {
     Transacao: ITransacao
 }
 
-interface ITransacaoServiceRequest {
+interface ITransacaoRequest {
     documento: string;
     idProduto: string;
 
@@ -31,12 +31,17 @@ interface ITransacaoServiceRequest {
     quantidade: number;
 }
 
+interface IDescontoRequest {
+    documento: string;
+    preco: number;
+}
+
 export default class TransacaoController {
 
     async EfetivarTransacaoDevolucao(request: Request, response: Response): Promise<Response<ITransacaoServiceResponse>> {
         try {
 
-            const transacaoRequest = <ITransacaoServiceRequest>request.body;
+            const transacaoRequest = <ITransacaoRequest>request.body;
             const idFarmacia = request['usr'];
             const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
             if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
@@ -68,7 +73,29 @@ export default class TransacaoController {
         }
     }
 
-    async AprovarDesconto() { //Todo
+    async AprovarDesconto(request: Request, response: Response) { //Todo
+        const descontoReq: IDescontoRequest = request.body;
+        const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
+        if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
+        const usuario = <IUsuario>usuarios[0];
 
+        const carteira = await _carteiraService.GetByUsuario(usuario);
+        const valorComDesconto = carteira
+
+        //_transacaoService.Debitar()
+    }
+
+    async VerDesconto(request: Request, response: Response) {
+        
+        const descontoReq: IDescontoRequest = request.body;
+        const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
+
+        if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
+        const usuario = <IUsuario>usuarios[0];
+
+        const carteira = await _carteiraService.GetByUsuario(usuario);
+        const valorComDesconto = carteira
+
+        //_transacaoService.Debitar()
     }
 }
