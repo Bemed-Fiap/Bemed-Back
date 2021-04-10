@@ -5,6 +5,7 @@ import moment from "moment";
 import TipoTransacao from "../utils/tipo-transacao.type";
 import ITransacao from "../models/interfaces/transacao.interface";
 import IProduto from '../models/interfaces/produto.interface';
+import ICarteira from '../models/interfaces/Carteira.interface';
 
 const _transacao = new TransacaoRepository();
 const _carteira = new CarteiraRepository();
@@ -43,16 +44,22 @@ export default class TransacaoService {
 
     async CalcularPontos(produto: IProduto, comBula: boolean, comReceita: boolean,
         comCaixa: boolean, comNotaFiscal: boolean, dentroDaValidade: boolean): Promise<number> {
-            let pontosPorUnidade = produto.pontosPorUnidade;
-            let porcentagem = 0;
-            
-            if (comBula) porcentagem = porcentagem + 0.05;
-            if (comCaixa) porcentagem = porcentagem + 0.05;
-            if (comNotaFiscal) porcentagem = porcentagem + 0.05;
-            if (comReceita) porcentagem = porcentagem + 0.05;
-            if (dentroDaValidade) porcentagem = porcentagem + 0.1;
+        let pontosPorUnidade = produto.pontosPorUnidade;
+        let porcentagem = 0;
 
-            return pontosPorUnidade * porcentagem;
+        if (comBula) porcentagem = porcentagem + 0.05;
+        if (comCaixa) porcentagem = porcentagem + 0.05;
+        if (comNotaFiscal) porcentagem = porcentagem + 0.05;
+        if (comReceita) porcentagem = porcentagem + 0.05;
+        if (dentroDaValidade) porcentagem = porcentagem + 0.1;
+
+        return pontosPorUnidade * porcentagem;
+    }
+
+    async CalcularDesconto(carteira: ICarteira, preco: number): Promise<number> {
+        const pts = carteira.pontos;
+        const desconto = pts / 10;
+        return preco - desconto;
     }
 
     private async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {

@@ -36,7 +36,6 @@ export default class TokenMiddleware {
     }
 
     static Forbidden(response: Response) {
-        response.status(HttpStatusCode.FORBIDDEN);
-        response.end();
+        return response.status(HttpStatusCode.FORBIDDEN).send();
     }
 }
