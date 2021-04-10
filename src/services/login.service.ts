@@ -1,5 +1,3 @@
-import IUsuario from "./../models/interfaces/usuario.interface";
-import UsuarioRepository from './../database/usuario.repository';
 import TokenService from './token.service';
 import BemedSecurity from '../utils/bemed.security';
 import ILogin from "../models/interfaces/login.interface";

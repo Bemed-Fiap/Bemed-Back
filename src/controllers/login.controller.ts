@@ -23,7 +23,7 @@ export default class LoginController {
             let usuario: any;
             let role = '';
 
-            if (documento?.toString().length > 11) {
+            if (documento?.toString().length == 11) {
 
                 usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: documento?.toString() });
                 if (usuarios.length == 0) return response.status(HttpStatusCode.NOT_FOUND).send();
@@ -37,7 +37,7 @@ export default class LoginController {
                 usuarios = await _farmaciaService.BuscarPor(<IFarmacia>{ cnpj: documento?.toString() });
                 if (usuarios.length == 0) return response.status(<number>HttpStatusCode.NOT_FOUND).send();
                 if (usuarios.length > 1) return response.status(<number>HttpStatusCode.CONFLICT).send();
-                
+
                 usuario = usuarios[0];
                 id = (<IFarmacia>usuario)._id;
                 role = 'Farmacia';
