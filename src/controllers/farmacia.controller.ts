@@ -54,7 +54,6 @@ export default class FarmaciaController {
         return response.json(usr);
     }
 
-
     async Post(request: Request, response: Response): Promise<Response<IFarmaciaServiceResponse>> {
         const builder = new FarmaciaBuilder();
         const farmaciaRequest = request.body;
@@ -68,8 +67,6 @@ export default class FarmaciaController {
             .setSalt(farmaciaRequest.salt)
             .setSenha(farmaciaRequest.senha)
             .Build();
-
-
 
         const _ = await _farmaciaService.Criar(Farmacia);
 

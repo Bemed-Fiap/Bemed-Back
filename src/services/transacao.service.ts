@@ -6,6 +6,7 @@ import TipoTransacao from "../utils/tipo-transacao.type";
 import ITransacao from "../models/interfaces/transacao.interface";
 import IProduto from '../models/interfaces/produto.interface';
 import ICarteira from '../models/interfaces/Carteira.interface';
+import IDesconto from '../models/interfaces/desconto.interface';
 
 const _transacao = new TransacaoRepository();
 const _carteira = new CarteiraRepository();
@@ -56,10 +57,24 @@ export default class TransacaoService {
         return pontosPorUnidade * porcentagem;
     }
 
-    async CalcularDesconto(carteira: ICarteira, preco: number): Promise<number> {
+    async CalcularDesconto(carteira: ICarteira, preco: number): Promise<IDesconto> {
         const pts = carteira.pontos;
-        const desconto = pts / 10;
-        return preco - desconto;
+
+        let desconto = pts / 10;
+        let precoRecalculado = preco - desconto;
+        
+        if(precoRecalculado < 0){
+            precoRecalculado = 0;
+            desconto = precoRecalculado;
+        }
+        const ptsUtilizados = desconto * 10;
+        return <IDesconto>{
+            pontosGastos: ptsUtilizados,
+            porcentagemDesconto: (desconto/preco) * 100,
+            precoComDesconto: preco - desconto,
+            precoTotal: preco,
+            valorDesconto: desconto
+        }
     }
 
     private async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {

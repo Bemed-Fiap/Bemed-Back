@@ -35,6 +35,12 @@ interface IDescontoRequest {
     documento: string;
     preco: number;
 }
+interface IDescontoResponse {
+    documento: string;
+    preco: number;
+    status: string;
+    valorComDesconto: number;
+}
 
 export default class TransacaoController {
 
@@ -94,8 +100,13 @@ export default class TransacaoController {
         const usuario = <IUsuario>usuarios[0];
 
         const carteira = await _carteiraService.GetByUsuario(usuario);
-        const valorComDesconto = carteira
+        const calculoDesconto = await _transacaoService.CalcularDesconto(carteira, descontoReq.preco);
 
-        //_transacaoService.Debitar()
+        return <IDescontoResponse>{
+            documento: descontoReq.documento,
+            preco: descontoReq.preco,
+            status: 'Desconto aprovado',
+            valorComDesconto: calculoDesconto.precoComDesconto
+        }
     }
 }
