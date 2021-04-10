@@ -18,26 +18,30 @@ interface ITransacaoServiceResponse {
     Transacao: ITransacao
 }
 
-interface ITransacaoRequest {
-    documento: string;
+interface ITransacaoProdutoRequest {
     idProduto: string;
-
     comBula: boolean;
     comReceita: boolean;
     comCaixa: boolean;
     comNotaFiscal: boolean;
     dentroDaValidade: boolean;
-
     quantidade: number;
+}
+
+interface ITransacaoRequest {
+    documento: string;
+    produtos: ITransacaoProdutoRequest[]
 }
 
 interface IDescontoRequest {
     documento: string;
-    preco: number;
+    produtos: string[];
+    precoTotal: number;
 }
+
 interface IDescontoResponse {
     documento: string;
-    preco: number;
+    precoTotal: number;
     status: string;
     valorComDesconto: number;
 }
@@ -50,63 +54,95 @@ export default class TransacaoController {
             const transacaoRequest = <ITransacaoRequest>request.body;
             const idFarmacia = request['usr'];
             const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
-            if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
+            if (usuarios.length > 1) response.sendStatus(HttpStatusCode.CONFLICT);
             const usuario = <IUsuario>usuarios[0];
+            const transacoesEfetivadas = [];
+            const transacoesComErro = [];
 
-            const produto = await _produtoService.BuscarPorId(transacaoRequest.idProduto);
-            const carteira = await _carteiraService.GetByUsuario(usuario);
+            for (const devolucao of transacaoRequest.produtos) {
+                const produto = await _produtoService.BuscarPorId(devolucao.idProduto);
+                try {
+                    const carteira = await _carteiraService.GetByUsuario(usuario);
 
-            const pontos = await _transacaoService.CalcularPontos(produto, transacaoRequest.comBula, transacaoRequest.comReceita,
-                transacaoRequest.comCaixa, transacaoRequest.comNotaFiscal, transacaoRequest.dentroDaValidade);
+                    const pontos = await _transacaoService.CalcularPontos(produto, devolucao.quantidade, devolucao.comBula, devolucao.comReceita,
+                        devolucao.comCaixa, devolucao.comNotaFiscal, devolucao.dentroDaValidade);
 
-            const transacao = await _transacaoService.Depositar(carteira._id, idFarmacia, pontos,
-                produto._id, transacaoRequest.quantidade);
+                    const transacao = await _transacaoService.Depositar(carteira._id.toString(), idFarmacia, pontos,
+                        produto._id, devolucao.quantidade);
+
+                    transacoesEfetivadas.push(produto.nome);
+
+                } catch {
+                    transacoesComErro.push(produto.nome);
+                }
+            }
 
             return response.json({
-                Transacao: transacao,
-                id: transacao._id.toString(),
-                mensagem: 'Salvo com sucesso!',
+                TransacoesEfetivadas: transacoesEfetivadas,
+                TransacoesNaoEfetivadas: transacoesComErro,
+                mensagem: 'Resultado das transações, recolha apenas as transações que foram efetivadas!',
                 sucesso: true
             });
 
         } catch (e) {
-            return response.json({
-                Transacao: null,
-                id: null,
-                mensagem: 'Erro ao criar Transacao!',
-                sucesso: false
-            })
+            return response.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send();
         }
     }
 
-    async AprovarDesconto(request: Request, response: Response) { //Todo
-        const descontoReq: IDescontoRequest = request.body;
-        const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
-        if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
-        const usuario = <IUsuario>usuarios[0];
+    async AprovarDesconto(request: Request, response: Response): Promise<Response<ITransacaoServiceResponse>> { //Todo
+        try {
+            const descontoReq: IDescontoRequest = request.body;
+            const idFarmacia = request['usr'];
+            const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
+            if (usuarios.length > 1) response.sendStatus(HttpStatusCode.CONFLICT);
+            const usuario = <IUsuario>usuarios[0];
 
-        const carteira = await _carteiraService.GetByUsuario(usuario);
-        const valorComDesconto = carteira
+            const carteira = await _carteiraService.GetByUsuario(usuario);
+            const calculoDesconto = await _transacaoService.CalcularDesconto(carteira, descontoReq.precoTotal);
 
-        //_transacaoService.Debitar()
+            const t = await _transacaoService.Debitar(carteira._id, idFarmacia, calculoDesconto.pontosGastos, descontoReq.produtos.join(','));
+
+            return response.json(<ITransacaoServiceResponse>{
+                Transacao: t,
+                mensagem: 'Pontos debitados com sucesso',
+                calculoDesconto: calculoDesconto,
+                sucesso: true
+            });
+        } catch (ex) {
+            console.log(ex);
+            return response.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send();
+        }
     }
 
-    async VerDesconto(request: Request, response: Response) {
-        
-        const descontoReq: IDescontoRequest = request.body;
-        const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
+    async VerDesconto(request: Request, response: Response): Promise<Response<IDescontoResponse>> {
+        try {
+            const descontoReq: IDescontoRequest = request.body;
+            const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
 
-        if (usuarios.length > 0) response.sendStatus(HttpStatusCode.CONFLICT);
-        const usuario = <IUsuario>usuarios[0];
+            if (usuarios.length > 1) response.sendStatus(HttpStatusCode.CONFLICT);
+            const usuario = <IUsuario>usuarios[0];
 
-        const carteira = await _carteiraService.GetByUsuario(usuario);
-        const calculoDesconto = await _transacaoService.CalcularDesconto(carteira, descontoReq.preco);
+            const carteira = await _carteiraService.GetByUsuario(usuario);
+            if (carteira.pontos > 0) {
+                const calculoDesconto = await _transacaoService.CalcularDesconto(carteira, descontoReq.precoTotal);
+                return response.json(<IDescontoResponse>{
+                    documento: descontoReq.documento,
+                    precoTotal: descontoReq.precoTotal,
+                    status: calculoDesconto.porcentagemDesconto > 0 ? 'Desconto aprovado' : 'Sem pontos para aplicar desconto',
+                    valorComDesconto: calculoDesconto.precoComDesconto
+                });
+            } else {
+                return response.json(<IDescontoResponse>{
+                    documento: descontoReq.documento,
+                    precoTotal: descontoReq.precoTotal,
+                    status: 'Sem pontos para aplicar desconto',
+                    valorComDesconto: descontoReq.precoTotal
+                });
+            }
 
-        return <IDescontoResponse>{
-            documento: descontoReq.documento,
-            preco: descontoReq.preco,
-            status: 'Desconto aprovado',
-            valorComDesconto: calculoDesconto.precoComDesconto
+        } catch {
+            return response.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send();
+
         }
     }
 }

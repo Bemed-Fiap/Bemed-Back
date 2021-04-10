@@ -19,7 +19,8 @@
     "razao": "FarmaisVc",
     "nomeFantasia": "FarmaisVC♥",
     "telefone": "+55 11 99999-9999",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -41,7 +42,8 @@
     "nomeFantasia": "Farma 1",
     "razao": "Farma 1",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -63,7 +65,8 @@
     "nomeFantasia": "Farma 2",
     "razao": "Farma 2",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -85,7 +88,8 @@
     "nomeFantasia": "Farma 3",
     "razao": "Farma 3",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -107,7 +111,8 @@
     "nomeFantasia": "Farma 4",
     "razao": "Farma 4",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -129,7 +134,8 @@
     "nomeFantasia": "Farma 5",
     "razao": "Farma 5",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -151,7 +157,8 @@
     "nomeFantasia": "Farma 6",
     "razao": "Farma 6",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -173,7 +180,8 @@
     "nomeFantasia": "Farma 7",
     "razao": "Farma 7",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -195,7 +203,8 @@
     "nomeFantasia": "Farma 8",
     "razao": "Farma 8",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -217,7 +226,8 @@
     "nomeFantasia": "Farma 9",
     "razao": "Farma 9",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -239,7 +249,8 @@
     "nomeFantasia": "Farma 10",
     "razao": "Farma 10",
     "telefone": "+55 11 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -261,7 +272,8 @@
     "nomeFantasia": "Farmácia do povo",
     "razao": "do povo",
     "telefone": "+55 13 91234-5678",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -283,7 +295,8 @@
     "nomeFantasia": "UBS do Jardim São Manoel",
     "razao": "São Manoel",
     "telefone": "+55 13 93299-5063",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   },
   {
     "Endereco": {
@@ -305,6 +318,7 @@
     "nomeFantasia": "Jorge Drugstore",
     "razao": "Jorge Drugstore",
     "telefone": "+55 13 99914-39897",
-    "senha": "abc123"
+    "salt": "f4563bbd9b6842c5",
+    "senha": "U2FsdGVkX18E9etKCg73APDXtsfYUT0gV15siZjErSc="
   }
 ]
