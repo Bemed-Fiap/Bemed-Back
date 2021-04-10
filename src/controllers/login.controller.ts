@@ -23,7 +23,7 @@ export default class LoginController {
             let usuario: any;
             let role = '';
 
-            if (documento?.toString().length > 11) {
+            if (documento?.toString().length == 11) {
 
                 usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: documento?.toString() });
                 if (usuarios.length == 0) return response.status(HttpStatusCode.NOT_FOUND).send();
