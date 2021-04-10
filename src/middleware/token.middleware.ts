@@ -21,6 +21,8 @@ export default class TokenMiddleware {
         const roles = tokenDecifrado.roles.filter(_ => allowedRoles.indexOf(_) > -1);
 
         if (moment(tokenDecifrado.expires) > moment(new Date()) && roles.length > 0) {
+            request['usr'] = tokenDecifrado.usuarioId;
+            request['documento'] = tokenDecifrado.usuarioDocumento;
             next();
         }
         else {
@@ -29,12 +31,11 @@ export default class TokenMiddleware {
         }
     }
 
-    async TestRoute(req, res) {
-        return res.json({ congrats: 'You are in!' });
+    async TestRoute(request: Request, response: Response) {
+        return response.json({ congrats: 'You are in!' });
     }
 
     static Forbidden(response: Response) {
-        response.status(HttpStatusCode.FORBIDDEN);
-        response.end();
+        return response.status(HttpStatusCode.UNAUTHORIZED).send();
     }
 }

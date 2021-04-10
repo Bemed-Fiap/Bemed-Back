@@ -1,7 +1,7 @@
 "use strict";
 enum TipoTransacao {
-    Entrada = 1,
-    Saida = 2,
+    EntradaPontos = 1,
+    SaidaPontos = 2,
 }
 
 export default TipoTransacao;

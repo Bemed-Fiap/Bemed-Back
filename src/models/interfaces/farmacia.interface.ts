@@ -8,5 +8,6 @@ export default interface IFarmacia {
     cnpj: string,
     senha: string,
     salt: string,
+    telefone: string,
     Endereco: IEndereco
 }

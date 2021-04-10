@@ -20,19 +20,16 @@ routes.get('/usuario/', _usuario.Get);
 routes.get('/usuario/:id', _usuario.Get);
 routes.post('/usuario', _usuario.Post);
 
-routes.get('/farmacia/', _farmacia.Get);
-routes.get('/farmacia/:id', _farmacia.Get);
+routes.get('/farmacia/', _tokenMiddleware.Validate, _farmacia.Get);
+routes.get('/farmacia/:id', _tokenMiddleware.Validate, _farmacia.Get);
 routes.post('/farmacia', _farmacia.Post);
 
 routes.get('/produto/', _tokenMiddleware.Validate, _produto.Get);
 routes.get('/produto/:id', _tokenMiddleware.Validate, _produto.Get);
 routes.post('/produto', _tokenMiddleware.Validate, _produto.Post);
 
-routes.post('/u/signin', _login.Post);
-routes.post('/u/signup', _usuario.Post);
-
-routes.post('/f/signin', _login.Post);
-routes.post('/f/signup', _usuario.Post);
+routes.post('/login', _login.Post);
+routes.post('/signup', _usuario.Post);
 
 routes.get('/tokentest', _tokenMiddleware.Validate, _tokenMiddleware.TestRoute);
 

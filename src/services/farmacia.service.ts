@@ -13,8 +13,8 @@ export default class FarmaciaService {
         return await _farmaciaRepository.GetById(id);
     }
 
-    async BuscarPor(usuario: IFarmacia): Promise<IFarmacia[]> {
-        return await _farmaciaRepository.Many(usuario);
+    async BuscarPor(farmacia: IFarmacia): Promise<IFarmacia[]> {
+        return await _farmaciaRepository.Many(farmacia);
     }
 
     async BuscarTodos(): Promise<IFarmacia[]> {

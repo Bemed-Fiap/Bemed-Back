@@ -20,8 +20,12 @@ export default class BemedSecurity {
     }
 
     Descriptografar(valor: string, salt: string): string {
-        var decrypted = CryptoJS.AES.decrypt(valor, salt + secret);
-        const originalText = decrypted.toString(CryptoJS.enc.Utf8);
-        return originalText;
+        try {
+            var decrypted = CryptoJS.AES.decrypt(valor, salt + secret);
+            const originalText = decrypted.toString(CryptoJS.enc.Utf8);
+            return originalText;
+        } catch (ex) {
+            return '';
+        }
     }
 }

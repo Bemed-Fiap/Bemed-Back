@@ -4,6 +4,8 @@ import CarteiraRepository from "../database/Carteira.repository";
 import moment from "moment";
 import TipoTransacao from "../utils/tipo-transacao.type";
 import ITransacao from "../models/interfaces/transacao.interface";
+import IProduto from '../models/interfaces/produto.interface';
+import ICarteira from '../models/interfaces/Carteira.interface';
 
 const _transacao = new TransacaoRepository();
 const _carteira = new CarteiraRepository();
@@ -16,7 +18,7 @@ export default class TransacaoService {
             .setFarmaciaId(farmaciaId)
             .setProdutoId(produtoId)
             .setQuantidadeProduto(produtoQuantidade)
-            .setTipoTransacao(TipoTransacao.Entrada)
+            .setTipoTransacao(TipoTransacao.EntradaPontos)
             .setValor(valor)
             .setDtCriacao(moment().toDate())
             .setDtAlteracao(moment().toDate()).Build()
@@ -31,7 +33,7 @@ export default class TransacaoService {
             .setFarmaciaId(farmaciaId)
             .setProdutoId(produtoId)
             .setQuantidadeProduto(produtoQuantidade)
-            .setTipoTransacao(TipoTransacao.Saida)
+            .setTipoTransacao(TipoTransacao.SaidaPontos)
             .setValor(valor)
             .setDtCriacao(moment().toDate())
             .setDtAlteracao(moment().toDate()).Build()
@@ -40,23 +42,43 @@ export default class TransacaoService {
         return transacao;
     }
 
+    async CalcularPontos(produto: IProduto, comBula: boolean, comReceita: boolean,
+        comCaixa: boolean, comNotaFiscal: boolean, dentroDaValidade: boolean): Promise<number> {
+        let pontosPorUnidade = produto.pontosPorUnidade;
+        let porcentagem = 0;
+
+        if (comBula) porcentagem = porcentagem + 0.05;
+        if (comCaixa) porcentagem = porcentagem + 0.05;
+        if (comNotaFiscal) porcentagem = porcentagem + 0.05;
+        if (comReceita) porcentagem = porcentagem + 0.05;
+        if (dentroDaValidade) porcentagem = porcentagem + 0.1;
+
+        return pontosPorUnidade * porcentagem;
+    }
+
+    async CalcularDesconto(carteira: ICarteira, preco: number): Promise<number> {
+        const pts = carteira.pontos;
+        const desconto = pts / 10;
+        return preco - desconto;
+    }
+
     private async AddTransacaoNaCarteira(transacao: ITransacao): Promise<boolean> {
         const carteira = await _carteira.GetById(transacao.carteiraDestinoId);
         carteira.HistoricoTranscoes.push(transacao._id);
         carteira.dtAlteracao = moment().toDate();
-        carteira.pontos = this.CalcularPontos(carteira.pontos, transacao);
+        carteira.pontos = this.CalcularTransacao(carteira.pontos, transacao);
         await _carteira.Update({ _id: carteira._id, }, carteira);
         return true;
     }
 
-    private CalcularPontos(pontos: number, transacao: ITransacao): number {
+    private CalcularTransacao(pontos: number, transacao: ITransacao): number {
         let result = pontos || 0;
         switch (transacao.tipoTransacao) {
-            case TipoTransacao.Entrada:
+            case TipoTransacao.EntradaPontos:
                 result = result + (transacao.valor * 1);
                 break;
-            case TipoTransacao.Entrada:
-                result = result + (transacao.valor * 1);
+            case TipoTransacao.SaidaPontos:
+                result = result - (transacao.valor * 1);
                 break;
         }
         return result;

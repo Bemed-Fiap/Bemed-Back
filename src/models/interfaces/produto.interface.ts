@@ -7,8 +7,12 @@ export default interface IProduto {
     categoria: CategoriaProduto //comprimido
     //tipoMedidaDevolucao: TipoMedidaDevolucao // comprimido
     
-    comBula: boolean //não
-    comCaixa: boolean //não
-    comReceita: boolean //não
-    comNF: boolean //sim
+    exigeBula: boolean //não
+    exigeCaixa: boolean //não
+    exigeReceita: boolean //não
+    exigeNF: boolean //sim
+
+    pontosPorUnidade: number 
+
+    fotoBase64: string
 }
