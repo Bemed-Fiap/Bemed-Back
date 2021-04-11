@@ -1,10 +1,142 @@
-{
-  "nome": "Dipirona Sódica",
-  "dosagem": "25mg",
-  "categoria": "1",
-  "exigeBula": "false",
-  "exigeCaixa": "true",
-  "exigeReceita": "false",
-  "exigeNF": "false",
-  "pontosPorUnidade": "20"
-}
+[
+  {
+    "nome": "ASPIRINA",
+    "dosagem": "250mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 822
+  },
+  {
+    "nome": "ASPIRINA",
+    "dosagem": "500mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 115
+  },
+  {
+    "nome": "AMOXIL",
+    "dosagem": "125mg/5mL",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 725
+  },
+  {
+    "nome": "AMOXIL",
+    "dosagem": "250mg/5mL",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 142
+  },
+  {
+    "nome": "AZITROMICINA",
+    "dosagem": "1000mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 603
+  },
+  {
+    "nome": "NOVALGINA",
+    "dosagem": "500mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 135
+  },
+  {
+    "nome": "ADVIL",
+    "dosagem": "200mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 175
+  },
+  {
+    "nome": "ADVIL",
+    "dosagem": "400 mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 136
+  },
+  {
+    "nome": "FLANAX",
+    "dosagem": "275mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 141
+  },
+  {
+    "nome": "FLANAX",
+    "dosagem": "550mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 533
+  },
+  {
+    "nome": "TYLENOL BEBÊ",
+    "dosagem": "100 mg/mL",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 885
+  },
+  {
+    "nome": "TYLENOL CRIANÇA",
+    "dosagem": "32 mg/mL",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 121
+  },
+  {
+    "nome": "TYLENOL GOTAS",
+    "dosagem": "200 mg/mL",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 569
+  },
+  {
+    "nome": "DIOVAN",
+    "dosagem": "160mg",
+    "categoria": "1",
+    "exigeBula": false,
+    "exigeCaixa": false,
+    "exigeReceita": false,
+    "exigeNF": false,
+    "pontosPorUnidade": 174
+  }
+]
