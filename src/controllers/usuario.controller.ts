@@ -42,10 +42,14 @@ export default class UsuarioController {
         }
     }
 
-    async GetMe(request: Request, response: Response): Promise<Response<IUsuario>> {
+    async GetMe(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse>> {
         const id = request['usr'];
         const usr = await _usuarioService.BuscarPorId(id);
-        return response.json(usr);
+        const carteira = await _carteiraService.GetByUsuario(usr);
+        return response.json(<IUsuarioServiceResponse>{
+            Usuario: usr,
+            Carteira: carteira
+        });
     }
 
     async Post(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse>> {

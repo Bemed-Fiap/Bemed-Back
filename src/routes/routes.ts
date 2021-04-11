@@ -44,18 +44,9 @@ routes.post('/produtos', _tokenMiddleware.Validate, _produto.Post);
 routes.post('/login', _login.Post);
 routes.post('/signup', _usuario.Post);
 
-routes.get('/desconto', 
-    //_tokenMiddleware.Validate, 
-    _transacao.VerDesconto
-);
-routes.post('/devolucao', 
-    //_tokenMiddleware.Validate, 
-    _transacao.EfetivarTransacaoDevolucao
-);
-routes.post('/desconto', 
-    //_tokenMiddleware.Validate, 
-    _transacao.AprovarDesconto
-);
+routes.get('/desconto', _tokenMiddleware.Validate, _transacao.VerDesconto);
+routes.post('/devolucao', _tokenMiddleware.Validate, _transacao.EfetivarTransacaoDevolucao);
+routes.post('/desconto', _tokenMiddleware.Validate, _transacao.AprovarDesconto);
 
 routes.get('/tokentest', _tokenMiddleware.Validate, _tokenMiddleware.TestRoute);
 
