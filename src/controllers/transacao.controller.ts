@@ -52,11 +52,12 @@ export default class TransacaoController {
         try {
 
             const transacaoRequest = <ITransacaoRequest>request.body;
-            transacaoRequest.documento = transacaoRequest.documento.replace(/[, ]+/g, " ").trim();
+            transacaoRequest.documento = transacaoRequest.documento.replace(/[^\w\s]/gi, '');
 
             const idFarmacia = request['usr'];
             const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: transacaoRequest.documento });
-            if (usuarios.length > 1) response.sendStatus(HttpStatusCode.CONFLICT);
+            if (usuarios.length == 0) response.status(HttpStatusCode.NOT_FOUND).send();
+            if (usuarios.length > 1) response.status(HttpStatusCode.CONFLICT).send();
             const usuario = <IUsuario>usuarios[0];
             const transacoesEfetivadas = [];
             const transacoesComErro = [];
@@ -94,11 +95,12 @@ export default class TransacaoController {
     async AprovarDesconto(request: Request, response: Response): Promise<Response<ITransacaoServiceResponse>> { //Todo
         try {
             const descontoReq: IDescontoRequest = request.body;
-            descontoReq.documento = descontoReq.documento.replace(/[, ]+/g, " ").trim();
+            descontoReq.documento = descontoReq.documento.replace(/[^\w\s]/gi, '');
 
             const idFarmacia = request['usr'];
             const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
-            if (usuarios.length > 1) response.sendStatus(HttpStatusCode.CONFLICT);
+            if (usuarios.length == 0) response.status(HttpStatusCode.NOT_FOUND).send();
+            if (usuarios.length > 1) response.status(HttpStatusCode.CONFLICT).send();
             const usuario = <IUsuario>usuarios[0];
 
             const carteira = await _carteiraService.GetByUsuario(usuario);
@@ -121,10 +123,10 @@ export default class TransacaoController {
     async VerDesconto(request: Request, response: Response): Promise<Response<IDescontoResponse>> {
         try {
             const descontoReq: IDescontoRequest = request.body;
-            descontoReq.documento = descontoReq.documento.replace(/[, ]+/g, " ").trim();
+            descontoReq.documento = descontoReq.documento.replace(/[^\w\s]/gi, '');
             const usuarios = await _usuarioService.BuscarPor(<IUsuario>{ documento: descontoReq.documento });
-
-            if (usuarios.length > 1) response.sendStatus(HttpStatusCode.CONFLICT);
+            if (usuarios.length == 0) response.status(HttpStatusCode.NOT_FOUND).send();
+            if (usuarios.length > 1) response.status(HttpStatusCode.CONFLICT).send();
             const usuario = <IUsuario>usuarios[0];
 
             const carteira = await _carteiraService.GetByUsuario(usuario);
