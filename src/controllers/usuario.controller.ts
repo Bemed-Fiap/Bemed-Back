@@ -12,6 +12,7 @@ const _carteiraService = new CarteiraService();
 interface IUsuarioServiceResponse {
     Usuario: IUsuario
     Carteira: ICarteira
+    role: string
 }
 
 export default class UsuarioController {
@@ -33,7 +34,7 @@ export default class UsuarioController {
 
             for (const u of usuarios) {
                 const c = await _carteiraService.GetByUsuario(u);
-                result.push({ Usuario: u, Carteira: c });
+                result.push({ Usuario: u, Carteira: c, role: 'Usuario' });
             }
             if (result.length > 0) return response.json(result);
             return response.sendStatus(HttpStatusCode.BAD_REQUEST);
@@ -69,7 +70,8 @@ export default class UsuarioController {
 
         const result: IUsuarioServiceResponse = {
             Usuario: null,
-            Carteira: null
+            Carteira: null,
+            role: null
         };
 
         const usuarioSalvo = await _usuarioService.Criar(usuario);
