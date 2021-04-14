@@ -26,7 +26,7 @@ export default class UsuarioService {
 
     async Criar(usuario: IUsuario): Promise<IUsuario> {
 
-        const usuariosEncontrados = await _usuarioRepository.Many({ email: usuario.email });
+        const usuariosEncontrados = await _usuarioRepository.Many({ documento: usuario.documento });
 
         if (usuariosEncontrados.length > 0) {
             _carteiraSevice.CriarCarteira(usuariosEncontrados[0]);

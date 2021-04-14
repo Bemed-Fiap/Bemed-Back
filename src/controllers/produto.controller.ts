@@ -43,13 +43,13 @@ export default class ProdutoController {
 
             const produto = builder
                 .setCategoria(produtoRequest.categoria)
-                .setExigeBula(produtoRequest.comBula)
-                .setExigeCaixa(produtoRequest.comCaixa)
-                .setExigeNF(produtoRequest.comNF)
-                .setExigeReceita(produtoRequest.comReceita)
+                .setExigeBula(produtoRequest.exigeBula)
+                .setExigeCaixa(produtoRequest.exigeCaixa)
+                .setExigeNF(produtoRequest.exigeNF)
+                .setExigeReceita(produtoRequest.exigeReceita)
                 .setDosagem(produtoRequest.dosagem)
                 .setNome(produtoRequest.nome)
-                //.setTipoMedidaDevolucao(produtoRequest.tipoMedidaDevolucao)
+                .setPontosPorUnidade(produtoRequest.pontosPorUnidade)
                 .Build();
 
             const produtoSalvo = await _produtoService.Criar(produto);

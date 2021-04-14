@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 import ICarteira from '../models/interfaces/Carteira.interface';
 import IUsuario from '../models/interfaces/usuario.interface';
 import UsuarioBuilder from './../models/usuario.builder';
@@ -12,6 +12,7 @@ const _carteiraService = new CarteiraService();
 interface IUsuarioServiceResponse {
     Usuario: IUsuario
     Carteira: ICarteira
+    role: string
 }
 
 export default class UsuarioController {
@@ -26,20 +27,30 @@ export default class UsuarioController {
 
             if (id) {
                 const usr = await _usuarioService.BuscarPorId(id);
-                if(usr) usuarios.push(usr);
+                if (usr) usuarios.push(usr);
             }
             else if (nome) { usuarios = await _usuarioService.BuscarPor(<IUsuario>{ nome: nome.toString() }); }
             else { usuarios = await _usuarioService.BuscarTodos(); }
 
             for (const u of usuarios) {
                 const c = await _carteiraService.GetByUsuario(u);
-                result.push({ Usuario: u, Carteira: c });
+                result.push({ Usuario: u, Carteira: c, role: 'Usuario' });
             }
             if (result.length > 0) return response.json(result);
             return response.sendStatus(HttpStatusCode.BAD_REQUEST);
         } catch (e) {
             return response.sendStatus(HttpStatusCode.BAD_REQUEST);
         }
+    }
+
+    async GetMe(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse>> {
+        const id = request['usr'];
+        const usr = await _usuarioService.BuscarPorId(id);
+        const carteira = await _carteiraService.GetByUsuario(usr);
+        return response.json(<IUsuarioServiceResponse>{
+            Usuario: usr,
+            Carteira: carteira
+        });
     }
 
     async Post(request: Request, response: Response): Promise<Response<IUsuarioServiceResponse>> {
@@ -49,7 +60,7 @@ export default class UsuarioController {
         const usuario = builder
             .setDocumento(usuarioRequest.documento)
             .setEmail(usuarioRequest.email)
-            .setEndereco(usuarioRequest.endereco)
+            .setEndereco(usuarioRequest.Endereco)
             .setNascimento(usuarioRequest.nascimento)
             .setNome(usuarioRequest.nome)
             .setSobrenome(usuarioRequest.sobrenome)
@@ -59,7 +70,8 @@ export default class UsuarioController {
 
         const result: IUsuarioServiceResponse = {
             Usuario: null,
-            Carteira: null
+            Carteira: null,
+            role: null
         };
 
         const usuarioSalvo = await _usuarioService.Criar(usuario);

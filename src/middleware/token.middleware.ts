@@ -13,29 +13,27 @@ export default class TokenMiddleware {
         const { onetoken } = request.headers;
 
         if (!onetoken) {
-            TokenMiddleware.Forbidden(response);
-            return;
+            return response.status(HttpStatusCode.UNAUTHORIZED).send();
         }
 
         const tokenDecifrado = await _tokenService.Decifrar(onetoken.toString());
-        const roles = tokenDecifrado.roles.filter(_ => allowedRoles.indexOf(_) > -1);
+        if (tokenDecifrado) {
+            const roles = tokenDecifrado.roles.filter(_ => allowedRoles.indexOf(_) > -1);
 
-        if (moment(tokenDecifrado.expires) > moment(new Date()) && roles.length > 0) {
-            request['usr'] = tokenDecifrado.usuarioId;
-            request['documento'] = tokenDecifrado.usuarioDocumento;
-            next();
-        }
-        else {
-            TokenMiddleware.Forbidden(response);
-            return;
+            if (moment(tokenDecifrado.expires) > moment(new Date()) && roles.length > 0) {
+                request['usr'] = tokenDecifrado.usuarioId;
+                request['documento'] = tokenDecifrado.usuarioDocumento;
+                next();
+            }
+            else {
+                return response.status(HttpStatusCode.UNAUTHORIZED).send();
+            }
+        } else {
+            return response.status(HttpStatusCode.UNAUTHORIZED).send();
         }
     }
 
     async TestRoute(request: Request, response: Response) {
         return response.json({ congrats: 'You are in!' });
-    }
-
-    static Forbidden(response: Response) {
-        return response.status(HttpStatusCode.UNAUTHORIZED).send();
     }
 }

@@ -32,6 +32,10 @@ export default class TokenService {
         trustKey = trustKey.split('').reverse().join('');
         const descryptedByte = CryptoJS.AES.decrypt(trustCipher, trustKey);
         const originalText = descryptedByte.toString(CryptoJS.enc.Utf8);
-        return JSON.parse(originalText.toString()) as IToken;
+        try {
+            return JSON.parse(originalText.toString()) as IToken;
+        } catch {
+            return null as IToken;
+        }
     }
 }
